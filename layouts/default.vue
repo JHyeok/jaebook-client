@@ -66,4 +66,8 @@ html {
   color: #fff;
   background-color: #35495e;
 }
+
+.page-container {
+  margin-top: 80px;
+}
 </style>

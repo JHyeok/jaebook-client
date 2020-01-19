@@ -1,11 +1,8 @@
 <template>
-  <div class="container">
+  <div class="container page-container">
     <div>
-      <h1 class="title">
-        {{ projectName }}
-      </h1>
       <h2 class="subtitle">
-        My unreal Nuxt.js project
+        {{ projectName }}
       </h2>
       <div class="links">
         <a href="https://nuxtjs.org/" target="_blank" class="button--green">Documentation</a>
