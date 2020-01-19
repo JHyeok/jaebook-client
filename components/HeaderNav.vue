@@ -26,13 +26,13 @@
         >
           <ul class="navbar-nav flex-grow-1">
             <li class="nav-item">
-              <nuxt-link :to="`/login`" class="nav-link text-dark">
+              <nuxt-link :to="`/account/login`" class="nav-link text-dark">
                 로그인
               </nuxt-link>
             </li>
             <li class="nav-item">
               <nuxt-link
-                :to="`/login/register`"
+                :to="`/account/register`"
                 class="nav-link text-dark"
               >
                 회원가입
