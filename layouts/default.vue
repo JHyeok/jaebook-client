@@ -1,8 +1,22 @@
 <template>
   <div>
+    <header-nav />
     <nuxt />
   </div>
 </template>
+
+<script lang="ts">
+import { Component, Vue } from 'nuxt-property-decorator'
+import HeaderNav from '@/components/HeaderNav.vue'
+
+@Component({
+  components: {
+    HeaderNav
+  }
+})
+export default class DefaultLayout extends Vue {
+}
+</script>
 
 <style>
 html {
