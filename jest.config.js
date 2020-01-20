@@ -4,6 +4,7 @@ module.exports = {
     '^~/(.*)$': '<rootDir>/$1',
     '^vue$': 'vue/dist/vue.common.js'
   },
+  setupFilesAfterEnv: ['./test/jest.setup.js'],
   moduleFileExtensions: ['ts', 'js', 'vue', 'json'],
   testRegex: '(test|spec)\\.(jsx?|tsx?)$',
   transform: {
