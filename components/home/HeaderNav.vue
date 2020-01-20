@@ -5,7 +5,7 @@
     >
       <div class="container">
         <nuxt-link
-          :to="`/home`"
+          :to="`/`"
           class="navbar-brand"
         >
           JAEBOOK
