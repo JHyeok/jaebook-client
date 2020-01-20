@@ -7,7 +7,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-import HeaderNav from '@/components/HeaderNav.vue'
+import HeaderNav from '~/components/home/HeaderNav.vue'
 
 @Component({
   components: {
