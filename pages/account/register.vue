@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-import Register from '@/components/account/Register.vue'
+import Register from '~/components/account/Register.vue'
 
 @Component({
   components: {
