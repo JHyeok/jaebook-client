@@ -1,8 +1,6 @@
 <template>
   <div class="container page-container">
-    <div>
-      <register />
-    </div>
+    <register />
   </div>
 </template>
 
