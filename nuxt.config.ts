@@ -11,7 +11,12 @@ export default {
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      {
+        rel: 'stylesheet',
+        type: 'text/css',
+        href: 'https://cdn.rawgit.com/innks/NanumSquareRound/master/nanumsquareround.min.css'
+      }
     ]
   },
   /*
@@ -22,6 +27,8 @@ export default {
   ** Global CSS
   */
   css: [
+    '~/assets/css/transitions.css',
+    '~/assets/fonts/nanumsquareround.css'
   ],
   /*
   ** Plugins to load before mounting the App
