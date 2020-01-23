@@ -2,16 +2,19 @@
   <div>
     <header-nav />
     <nuxt />
+    <footer-nav />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
 import HeaderNav from '~/components/home/HeaderNav.vue'
+import FooterNav from '~/components/home/FooterNav.vue'
 
 @Component({
   components: {
-    HeaderNav
+    HeaderNav,
+    FooterNav
   }
 })
 export default class DefaultLayout extends Vue {
@@ -22,13 +25,26 @@ export default class DefaultLayout extends Vue {
 html {
   font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
     Roboto, 'Helvetica Neue', Arial, sans-serif;
-  font-size: 16px;
+  font-size: 14px;
+  position: relative;
+  min-height: 100%;
   word-spacing: 1px;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
 }
 
 *,
@@ -65,9 +81,5 @@ html {
 .button--grey:hover {
   color: #fff;
   background-color: #35495e;
-}
-
-.page-container {
-  margin-top: 80px;
 }
 </style>
