@@ -82,4 +82,12 @@ body {
   color: #fff;
   background-color: #35495e;
 }
+
+.auth-container {
+  margin-top: 80px;
+}
+
+.index-container {
+  margin-top: 10px;
+}
 </style>
