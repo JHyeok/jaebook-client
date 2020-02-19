@@ -1,8 +1,8 @@
 export default {
   mode: 'universal',
   /*
-  ** Headers of the page
-  */
+   ** Headers of the page
+   */
   head: {
     title: process.env.npm_package_name || '',
     meta: [
@@ -20,37 +20,43 @@ export default {
     ]
   },
   /*
-  ** Customize the progress-bar color
-  */
+   ** Environment variables
+   */
+  env: {
+    apiUrl: process.env.API_URL || 'http://localhost:3000/api'
+  },
+  /*
+   ** Customize the progress-bar color
+   */
   loading: { color: '#fff' },
   /*
-  ** Global CSS
-  */
+   ** Global CSS
+   */
   css: [
     '~/assets/css/transitions.css',
     '~/assets/fonts/nanumsquareround.css'
   ],
   /*
-  ** Plugins to load before mounting the App
-  */
+   ** Plugins to load before mounting the App
+   */
   plugins: [
   ],
   /*
-  ** Nuxt.js dev-modules
-  */
+   ** Nuxt.js dev-modules
+   */
   buildModules: [
     '@nuxt/typescript-build'
   ],
   /*
-  ** Nuxt.js modules
-  */
+   ** Nuxt.js modules
+   */
   modules: [
     // Doc: https://bootstrap-vue.js.org
     'bootstrap-vue/nuxt'
   ],
   /*
-  ** Build configuration
-  */
+   ** Build configuration
+   */
   build: {
   }
 }
