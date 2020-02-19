@@ -4,6 +4,12 @@
   "description": "My unreal Nuxt.js project",
   "author": "JHyeok",
   "private": true,
+  "config": {
+    "nuxt": {
+      "host": "0.0.0.0",
+      "port": "5000"
+    }
+  },
   "scripts": {
     "dev": "nuxt-ts",
     "build": "nuxt-ts build",
