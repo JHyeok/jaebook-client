@@ -47,11 +47,8 @@ export default class LoginComponent extends Vue {
   }
 
   private login (): void {
-    // eslint-disable-next-line no-console
-    console.log('login!')
-    /*
     this.$store
-      .dispatch('account/login', {
+      .dispatch('user/login', {
         email: this.email,
         password: this.password
       })
@@ -61,7 +58,6 @@ export default class LoginComponent extends Vue {
       .catch((ex) => {
         this.result = ex
       })
-    */
   }
 }
 </script>
