@@ -26,12 +26,7 @@ export const actions = {
     }
     try {
       const res = await axios.post('/auth/login', params)
-
-      // accessToken, refreshToken 제거
-      delete res.data.accessToken
-      delete res.data.refreshToken
-
-      commit('SET_USER', res.data)
+      commit('SET_USER', res.data.userInfo)
     } catch (error) {
       commit('SET_USER', null)
     }

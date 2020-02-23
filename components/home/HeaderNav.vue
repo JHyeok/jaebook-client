@@ -5,7 +5,13 @@
         JAEBOOK
       </nuxt-link>
     </h5>
-    <nav class="my-2 my-md-0 mr-md-3">
+    <nav v-if="isLogin()" class="my-2 my-md-0 mr-md-3">
+      {{ showProfileName() }} 님, 환영합니다!
+      <nuxt-link :to="`/account/logout`" class="p-2 text-dark">
+        로그아웃
+      </nuxt-link>
+    </nav>
+    <nav v-else class="my-2 my-md-0 mr-md-3">
       <nuxt-link :to="`/account/login`" class="p-2 text-dark">
         로그인
       </nuxt-link>
@@ -21,5 +27,16 @@ import { Component, Vue } from 'nuxt-property-decorator'
 
 @Component
 export default class HeaderNavComponent extends Vue {
+  private showProfileName (): string {
+    return this.$store.getters['user/data'].realName || ''
+  }
+
+  private isLogin (): boolean {
+    if (this.$store.getters['user/data']) {
+      return true
+    } else {
+      return false
+    }
+  }
 }
 </script>
