@@ -20,12 +20,6 @@ export default {
     ]
   },
   /*
-   ** Environment variables
-   */
-  env: {
-    apiUrl: process.env.API_URL || 'http://localhost:3000/api'
-  },
-  /*
    ** Customize the progress-bar color
    */
   loading: { color: '#fff' },
@@ -52,8 +46,30 @@ export default {
    */
   modules: [
     // Doc: https://bootstrap-vue.js.org
-    'bootstrap-vue/nuxt'
+    'bootstrap-vue/nuxt',
+    '@nuxtjs/axios',
+    '@nuxtjs/auth'
   ],
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: { url: '/auth/login', method: 'post', propertyName: 'accessToken' },
+          user: { url: '/users/me', method: 'get', propertyName: 'userInfo' },
+          logout: false
+        }
+      }
+    },
+    redirect: {
+      login: '/account/login',
+      logout: '/',
+      // callback: '/callback',
+      home: '/'
+    }
+  },
+  axios: {
+    baseURL: process.env.API_URL || 'http://localhost:3000/api'
+  },
   /*
    ** Build configuration
    */
