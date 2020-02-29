@@ -7,7 +7,7 @@
     </h5>
     <nav v-if="$auth.$state.loggedIn" class="my-2 my-md-0 mr-md-3">
       {{ $auth.$state.user.realName }} 님, 환영합니다!
-      <a href="#" class="p-2 text-dark" @click="$auth.logout()">로그아웃</a>
+      <a href="#" class="p-2 text-dark" @click="logout()">로그아웃</a>
     </nav>
     <nav v-else class="my-2 my-md-0 mr-md-3">
       <nuxt-link :to="`/account/login`" class="p-2 text-dark">
@@ -25,5 +25,9 @@ import { Component, Vue } from 'nuxt-property-decorator'
 
 @Component
 export default class HeaderNavComponent extends Vue {
+  private async logout () {
+    await this.$auth.logout()
+    this.$toast.success('로그아웃 되었습니다.')
+  }
 }
 </script>
