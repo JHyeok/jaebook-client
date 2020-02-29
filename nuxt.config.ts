@@ -48,7 +48,8 @@ export default {
     // Doc: https://bootstrap-vue.js.org
     'bootstrap-vue/nuxt',
     '@nuxtjs/axios',
-    '@nuxtjs/auth'
+    '@nuxtjs/auth',
+    '@nuxtjs/toast'
   ],
   auth: {
     strategies: {
@@ -69,6 +70,10 @@ export default {
   },
   axios: {
     baseURL: process.env.API_URL || 'http://localhost:3000/api'
+  },
+  toast: {
+    position: 'bottom-right',
+    duration: 3000
   },
   /*
    ** Build configuration
