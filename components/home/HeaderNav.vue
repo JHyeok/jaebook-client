@@ -6,6 +6,7 @@
       </nuxt-link>
     </h5>
     <nav v-if="$auth.$state.loggedIn" class="my-2 my-md-0 mr-md-3">
+      {{ $auth.$state.user.realName }} 님, 환영합니다!
       <a href="#" class="p-2 text-dark" @click="$auth.logout()">로그아웃</a>
     </nav>
     <nav v-else class="my-2 my-md-0 mr-md-3">

@@ -40,6 +40,7 @@
 <script>
 export default {
   middleware: ['auth'],
+
   data () {
     return {
       email: '',
@@ -47,6 +48,7 @@ export default {
       error: null
     }
   },
+
   computed: {
     isLogin () {
       if (this.email.length > 0 && this.password.length > 0) {
@@ -61,6 +63,7 @@ export default {
       )
     }
   },
+
   methods: {
     login () {
       this.error = null
@@ -71,8 +74,8 @@ export default {
             password: this.password
           }
         })
-        .catch((e) => {
-          this.error = e.message + ''
+        .catch((error) => {
+          this.error = error.message + ''
         })
     }
   }
