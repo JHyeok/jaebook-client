@@ -37,65 +37,59 @@
   </div>
 </template>
 
-<script>
-export default {
-  auth: 'guest',
+<script lang="ts">
+import Vue from 'vue'
+import Component from 'vue-class-component'
 
-  data () {
-    return {
-      name: '',
-      email: '',
-      password: '',
-      error: null
+@Component
+export default class RegisterPage extends Vue {
+  private name: string = ''
+  private email: string = ''
+  private password: string = ''
+  private error: string = ''
+
+  isRegister () {
+    if (this.name.length > 0 && this.email.length > 0 && this.password.length > 0) {
+      return true
+    } else {
+      return false
     }
-  },
+  }
 
-  computed: {
-    isRegister () {
-      if (this.name.length > 0 && this.email.length > 0 && this.password.length > 0) {
-        return true
-      } else {
-        return false
+  async register () {
+    this.error = ''
+    try {
+      const params = {
+        realName: this.name,
+        email: this.email,
+        password: this.password
       }
-    }
-  },
 
-  methods: {
-    async register () {
-      this.error = null
-      try {
-        const params = {
-          realName: this.name,
-          email: this.email,
-          password: this.password
-        }
+      const res = await (this as any).$axios.post('/auth/register', params)
 
-        const res = await this.$axios.post('/auth/register', params)
-
-        // 중복 이메일 체크
-        if (res.data.code === 'ERR_REGISTER_DUPLICATE_EMAIL') {
-          throw new Error(res.data.message)
-        }
-
-        // 회원가입 후 로그인
-        if (res.data.userInfo) {
-          return this.$auth
-            .loginWith('local', {
-              data: {
-                email: this.email,
-                password: this.password
-              }
-            })
-            .then(() => {
-              this.$router.push('/')
-            })
-            .catch((error) => {
-              this.error = error.message + ''
-            })
-        }
-      } catch (error) {
-        this.error = error.message + ''
+      // 중복 이메일 체크
+      if (res.data.code === 'ERR_REGISTER_DUPLICATE_EMAIL') {
+        throw new Error(res.data.message)
       }
+
+      // 회원가입 후 로그인
+      if (res.data.userInfo) {
+        return (this as any).$auth
+          .loginWith('local', {
+            data: {
+              email: this.email,
+              password: this.password
+            }
+          })
+          .then(() => {
+            this.$router.push('/')
+          })
+          .catch((error) => {
+            this.error = (error.message as string) + ''
+          })
+      }
+    } catch (error) {
+      this.error = (error.message as string) + ''
     }
   }
 }

@@ -37,47 +37,44 @@
   </div>
 </template>
 
-<script>
-export default {
-  middleware: ['auth'],
+<script lang="ts">
+import Vue from 'vue'
+import Component from 'vue-class-component'
 
-  data () {
-    return {
-      email: '',
-      password: '',
-      error: null
-    }
-  },
+@Component({
+  middleware: ['auth']
+})
+export default class LoginPage extends Vue {
+  private email:string = ''
+  private password:string = ''
+  private error:string = ''
 
-  computed: {
-    isLogin () {
-      if (this.email.length > 0 && this.password.length > 0) {
-        return true
-      } else {
-        return false
-      }
-    },
-    redirect () {
-      return (
-        this.$route.query.redirect && decodeURIComponent(this.$route.query.redirect)
-      )
+  isLogin (): boolean {
+    if (this.email.length > 0 && this.password.length > 0) {
+      return true
+    } else {
+      return false
     }
-  },
+  }
 
-  methods: {
-    login () {
-      this.error = null
-      return this.$auth
-        .loginWith('local', {
-          data: {
-            email: this.email,
-            password: this.password
-          }
-        })
-        .catch((error) => {
-          this.error = error.message + ''
-        })
-    }
+  redirect (): string {
+    return (
+      this.$route.query.redirect && decodeURIComponent((this as any).$route.query.redirect)
+    )
+  }
+
+  login (): void {
+    this.error = ''
+    return (this as any).$auth
+      .loginWith('local', {
+        data: {
+          email: this.email,
+          password: this.password
+        }
+      })
+      .catch((error) => {
+        this.error = (error.message as string) + ''
+      })
   }
 }
 </script>

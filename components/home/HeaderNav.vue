@@ -21,13 +21,15 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
+import Vue from 'vue'
+import Component from 'vue-class-component'
 
 @Component
-export default class HeaderNavComponent extends Vue {
-  private async logout () {
-    await this.$auth.logout()
-    this.$toast.success('로그아웃 되었습니다.')
+export default class HeaderNav extends Vue {
+  logout (): void {
+    (this as any).$auth.logout().then(() => {
+      (this as any).$toast.success('로그아웃 되었습니다.')
+    })
   }
 }
 </script>

@@ -7,7 +7,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
+import Vue from 'vue'
+import Component from 'vue-class-component'
 import HeaderNav from '~/components/home/HeaderNav.vue'
 import FooterNav from '~/components/home/FooterNav.vue'
 
