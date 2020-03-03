@@ -1,0 +1,67 @@
+<template>
+  <div class="card" @click="onView(post.id)">
+    <div class="card-body post-card-body">
+      <h6 class="card-title">
+        <strong>{{ post.title }}</strong>
+      </h6>
+      <div class="card-text post-content-body">
+        <p class="card-text post-content">
+          {{ post.previewContent }}
+        </p>
+      </div>
+      <div class="post-info">
+        {{ getDate(post.createdAt) }}
+      </div>
+      <div class="card-text">
+        {{ post.user.realName }} ({{ post.user.email }})
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import Vue from 'vue'
+import Component from 'vue-class-component'
+
+@Component({
+  props: {
+    post: Object,
+    onView: Function
+  }
+})
+export default class PostCard extends Vue {
+  getDate (datetime) {
+    return new Date(datetime).toLocaleString('ko-KR', {
+      timeZone: 'Asia/Seoul'
+    })
+  }
+}
+</script>
+
+<style scoped>
+.card-title {
+  cursor: pointer;
+}
+.post-card-body {
+  height: 288px;
+}
+.post-content-body {
+  cursor: pointer;
+  height: 150px;
+}
+.post-content {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  word-wrap: break-word;
+  line-height: 1.2em;
+  height: 4.8em;
+}
+.post-info {
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: rgb(134, 142, 150);
+}
+</style>
