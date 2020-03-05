@@ -1,6 +1,6 @@
 ## ❯ JaeBook Client
 
-간단한 SNS 토이 프로젝트입니다.
+사이드 프로젝트입니다.
 
 ### TechStack
 
