@@ -33,14 +33,12 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import InfiniteLoading from 'vue-infinite-loading'
 import PostCard from '~/components/post/PostCard.vue'
 Component.registerHooks(['asyncData'])
 
 @Component({
   components: {
-    PostCard,
-    InfiniteLoading
+    PostCard
   }
 })
 export default class PostsPage extends Vue {

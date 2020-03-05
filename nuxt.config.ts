@@ -34,6 +34,7 @@ export default {
    ** Plugins to load before mounting the App
    */
   plugins: [
+    { src: '~/plugins/vue-infinite-loading.ts', mode: 'client' }
   ],
   /*
    ** Nuxt.js dev-modules
