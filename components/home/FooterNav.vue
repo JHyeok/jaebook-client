@@ -5,7 +5,7 @@
         JaeBook
       </nuxt-link>
       <span>
-        SNS 토이 프로젝트 입니다.
+        사이드 프로젝트 입니다.
         <a
           rel="noopener noreferrer"
           target="blank"

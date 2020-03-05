@@ -18,9 +18,7 @@
       </template>
       <infinite-loading spinner="spiral" @infinite="infiniteHandler">
         <div slot="no-more" />
-        <div slot="no-results">
-          No Posts
-        </div>
+        <div slot="no-results" />
         <div slot="error" slot-scope="{ trigger }">
           Error message, click
           <a href="javascript:;" @click="trigger">here</a> to retry
@@ -41,41 +39,45 @@ Component.registerHooks(['asyncData'])
     PostCard
   }
 })
-export default class PostsPage extends Vue {
+export default class PostListPage extends Vue {
   private posts: any = []
   private page: number = 1
   private offset: number = 0
   private limit: number = 20
 
-  async asyncData (context) {
+  async asyncData ({ $axios }) {
     try {
-      const data = await context.$axios.$get('/posts?offset=0&limit=20')
+      const data = await $axios.$get('/posts?offset=0&limit=20')
       return {
         posts: data
       }
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error)
+      return {
+        posts: []
+      }
     }
   }
 
   infiniteHandler ($state) {
     setTimeout(async () => {
-      this.page++
-      this.offset = (this.page - 1) * this.limit
-      const data = await (this as any).$axios.$get(`/posts?offset=${this.offset}&limit=${this.limit}`)
-      if (data.length > 0) {
-        this.posts = [...this.posts, ...data]
-        $state.loaded()
-      } else {
+      try {
+        this.page++
+        this.offset = (this.page - 1) * this.limit
+        const data = await (this as any).$axios.$get(`/posts?offset=${this.offset}&limit=${this.limit}`)
+        if (data.length > 0) {
+          this.posts = [...this.posts, ...data]
+          $state.loaded()
+        } else {
+          $state.complete()
+        }
+      } catch (error) {
         $state.complete()
       }
     }, 0)
   }
 
   viewPost (postId): void {
-    // eslint-disable-next-line no-console
-    console.log(`postId: ${postId}`)
+    this.$router.push(`/posts/${postId}`)
   }
 }
 </script>
