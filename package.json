@@ -18,6 +18,27 @@
     "lint": "eslint --ext .ts,.js,.vue . --ignore-path .gitignore .",
     "test": "jest"
   },
+  "jest": {
+    "preset": "ts-jest",
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/$1",
+      "^~/(.*)$": "<rootDir>/$1",
+      "^vue$": "vue/dist/vue.common.js"
+    },
+    "setupFilesAfterEnv": ["./test/jest.setup.ts"],
+    "moduleFileExtensions": ["ts", "js", "vue", "json"],
+    "testRegex": "(test|spec)\\.(jsx?|tsx?)$",
+    "transform": {
+      "^.+\\.ts?$": "ts-jest",
+      "^.+\\.js$": "babel-jest",
+      ".*\\.(vue)$": "vue-jest"
+    },
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "<rootDir>/components/**/*.vue",
+      "<rootDir>/pages/**/*.vue"
+    ]
+  },
   "dependencies": {
     "@nuxt/typescript-runtime": "^0.3.6",
     "@nuxtjs/auth": "^4.8.5",
