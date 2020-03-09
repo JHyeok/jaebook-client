@@ -5,17 +5,15 @@
         <h3 class="post-title">
           {{ post.title }}
         </h3>
+        <span class="date-text">{{ getDate(post.createdAt) }}</span>
       </div>
       <div class="col-md-12 mb-4">
         <div class="post-details">
           <div class="sub-info">
             <dl>
               <dd>
-                <span class="date-text">{{ getDate(post.createdAt) }}</span>
-              </dd>
-              <dd>
-                <span class="sub-info-bar">|</span>
-                <span class="num-text">0 읽음</span>
+                <span class="num-text float-left">{{ post.like }} 명이 좋아요를 눌렀습니다.</span>
+                <span class="num-text float-right">{{ post.view }} 읽음</span>
               </dd>
             </dl>
           </div>
@@ -29,6 +27,14 @@
         Edit Post
       </button>
     </div>
+    <div v-if="$auth.$state.loggedIn" class="my-3">
+      <button v-if="isPostLiked" class="btn btn-primary" @click="unlikePost(post.id)">
+        UnLike!
+      </button>
+      <button v-else class="btn btn-primary" @click="likePost(post.id)">
+        Like!
+      </button>
+    </div>
   </main>
 </template>
 
@@ -40,16 +46,25 @@ Component.registerHooks(['asyncData'])
 @Component
 export default class PostDetailPage extends Vue {
   private post: any = []
+  private isPostLiked: boolean = false;
 
-  async asyncData ({ $axios, params }) {
+  async asyncData ({ $auth, $axios, params }) {
     try {
+      let isPostLiked: boolean = false
       const data = await $axios.$get(`/posts/${params.id}`)
+
+      if ($auth.$state.loggedIn) {
+        isPostLiked = await $axios.$get(`/posts/${params.id}/like`).isPostLiked
+      }
+
       return {
-        post: data
+        post: data,
+        isPostLiked
       }
     } catch (error) {
       return {
-        post: []
+        post: [],
+        isPostLiked: false
       }
     }
   }
@@ -62,6 +77,28 @@ export default class PostDetailPage extends Vue {
 
   editPost (postId): void {
     this.$router.push(`/posts/${postId}/edit`)
+  }
+
+  async likePost (postId) {
+    try {
+      const res = await (this as any).$axios.$post(`/posts/${postId}/like`)
+      this.post.like = res.like as number
+      this.isPostLiked = true;
+      (this as any).$toast.success('좋아요를 하였습니다.')
+    } catch (error) {
+      (this as any).$toast.error(error.message as string)
+    }
+  }
+
+  async unlikePost (postId) {
+    try {
+      const res = await (this as any).$axios.$delete(`/posts/${postId}/like`)
+      this.post.like = res.like as number
+      this.isPostLiked = false;
+      (this as any).$toast.success('좋아요를 취소하였습니다.')
+    } catch (error) {
+      (this as any).$toast.error(error.message as string)
+    }
   }
 }
 </script>
@@ -84,8 +121,7 @@ export default class PostDetailPage extends Vue {
 }
 
 .num-text {
-  float: right;
-  font-size: 13px;
+  font-size: 15px;
   color: #828282;
 }
 
@@ -97,10 +133,5 @@ export default class PostDetailPage extends Vue {
   font-size: 14px;
   color: #828282;
   letter-spacing: 0;
-}
-
-.sub-info-bar {
-  margin: 0 15px;
-  color: #eaeaea;
 }
 </style>
