@@ -26,6 +26,9 @@
       <button class="btn btn-info" @click="editPost(post.id)">
         Edit Post
       </button>
+      <button class="btn btn-info" @click="deletePost(post.id)">
+        Delete Post
+      </button>
     </div>
     <div v-if="$auth.$state.loggedIn" class="my-3">
       <button v-if="isPostLiked" class="btn btn-primary" @click="unlikePost(post.id)">
@@ -35,23 +38,34 @@
         Like!
       </button>
     </div>
+    <post-comment-form :post-id="post.id" />
+    <post-comment :comments="comments" />
   </main>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component'
+import PostComment from '~/components/post/PostComment.vue'
+import PostCommentForm from '~/components/post/PostCommentForm.vue'
 Component.registerHooks(['asyncData'])
 
-@Component
+@Component({
+  components: {
+    PostComment,
+    PostCommentForm
+  }
+})
 export default class PostDetailPage extends Vue {
   private post: any = []
+  private comments: any = []
   private isPostLiked: boolean = false;
 
   async asyncData ({ $auth, $axios, params }) {
     try {
       let isPostLiked: boolean = false
       const data = await $axios.$get(`/posts/${params.id}`)
+      const commentData = await $axios.$get(`/posts/${params.id}/comments`)
 
       if ($auth.$state.loggedIn) {
         isPostLiked = await $axios.$get(`/posts/${params.id}/like`).isPostLiked
@@ -59,11 +73,13 @@ export default class PostDetailPage extends Vue {
 
       return {
         post: data,
+        comments: commentData,
         isPostLiked
       }
     } catch (error) {
       return {
         post: [],
+        comments: [],
         isPostLiked: false
       }
     }
@@ -77,6 +93,21 @@ export default class PostDetailPage extends Vue {
 
   editPost (postId): void {
     this.$router.push(`/posts/${postId}/edit`)
+  }
+
+  async deletePost (postId) {
+    try {
+      const res = await (this as any).$axios.$delete(`/posts/${postId}`)
+
+      if (res.postId === postId && res.isDelete) {
+        (this as any).$toast.success('포스트를 삭제하였습니다.')
+        this.$router.push('/posts')
+      } else {
+        (this as any).$toast.error('잘못된 접근입니다.')
+      }
+    } catch (error) {
+      (this as any).$toast.error(error.message as string)
+    }
   }
 
   async likePost (postId) {
