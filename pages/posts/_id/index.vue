@@ -17,8 +17,7 @@
               </dd>
             </dl>
           </div>
-          <!-- eslint-disable-next-line vue/no-v-html -->
-          <textarea class="form-control" rows="14" disabled v-html="post.content" />
+          <section class="post-body" v-text="post.content" />
         </div>
       </div>
     </div>
@@ -146,9 +145,14 @@ export default class PostDetailPage extends Vue {
   word-wrap: break-word;
 }
 
+.post-body {
+  white-space:pre;
+}
+
 .sub-info {
   overflow: hidden;
   margin-top: 15px;
+  margin-bottom: 15px;
 }
 
 .num-text {

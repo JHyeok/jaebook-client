@@ -16,9 +16,7 @@
                     <span class="text-muted pull-right">
                       <small class="text-muted">{{ getDate(comment.createdAt) }}</small>
                     </span>
-                    <p>
-                      {{ comment.text }}
-                    </p>
+                    <div class="comment-body" v-text="comment.text" />
                   </div>
                   <div v-if="$auth.$state.loggedIn && ($auth.$state.user.id === comment.user.id)" class="float-right">
                     <span><a href="#">수정</a></span>
@@ -53,9 +51,8 @@ export default class PostComment extends Vue {
 </script>
 
 <style scoped>
-.comment-wrapper .panel-body {
-  max-height:650px;
-  overflow:auto;
+.comment-body {
+  white-space:pre;
 }
 
 .comment-wrapper .media-list {
