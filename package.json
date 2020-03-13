@@ -25,8 +25,15 @@
       "^~/(.*)$": "<rootDir>/$1",
       "^vue$": "vue/dist/vue.common.js"
     },
-    "setupFilesAfterEnv": ["./test/jest.setup.ts"],
-    "moduleFileExtensions": ["ts", "js", "vue", "json"],
+    "setupFilesAfterEnv": [
+      "./test/jest.setup.ts"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "vue",
+      "json"
+    ],
     "testRegex": "(test|spec)\\.(jsx?|tsx?)$",
     "transform": {
       "^.+\\.ts?$": "ts-jest",
@@ -41,7 +48,7 @@
   },
   "dependencies": {
     "@nuxt/typescript-runtime": "^0.3.6",
-    "@nuxtjs/auth": "^4.8.5",
+    "@nuxtjs/auth": "github:nuxt-community/auth-module#feat/refresh",
     "@nuxtjs/axios": "^5.9.5",
     "@nuxtjs/dotenv": "^1.4.0",
     "@nuxtjs/toast": "^3.3.0",
