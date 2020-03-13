@@ -67,13 +67,12 @@ export default class RegisterPage extends Vue {
 
       const res = await (this as any).$axios.post('/auth/register', params)
 
-      // 중복 이메일 체크
-      if (res.data.code === 'ERR_REGISTER_DUPLICATE_EMAIL') {
+      if (res.data.error) {
         throw new Error(res.data.message)
       }
 
       // 회원가입 후 로그인
-      if (res.data.userInfo) {
+      if (res.data.user) {
         return (this as any).$auth
           .loginWith('local', {
             data: {
@@ -81,8 +80,10 @@ export default class RegisterPage extends Vue {
               password: this.password
             }
           })
-          .then(() => {
-            this.$router.push('/')
+          .then((res) => {
+            if (res.data.error) {
+              throw new Error(res.data.message)
+            }
           })
           .catch((error) => {
             this.error = (error.message as string) + ''

@@ -1,7 +1,7 @@
 export default {
   mode: 'universal',
-  /*
-   ** Headers of the page
+  /**
+   * Headers of the page
    */
   head: {
     title: process.env.npm_package_name || '',
@@ -19,31 +19,31 @@ export default {
       }
     ]
   },
-  /*
-   ** Customize the progress-bar color
+  /**
+   * Customize the progress-bar color
    */
   loading: { color: '#fff' },
-  /*
-   ** Global CSS
+  /**
+   * Global CSS
    */
   css: [
     '~/assets/css/transitions.css',
     '~/assets/fonts/nanumsquareround.css'
   ],
-  /*
-   ** Plugins to load before mounting the App
+  /**
+   * Plugins to load before mounting the App
    */
   plugins: [
     { src: '~/plugins/vue-infinite-loading.ts', mode: 'client' }
   ],
-  /*
-   ** Nuxt.js dev-modules
+  /**
+   * Nuxt.js dev-modules
    */
   buildModules: [
     '@nuxt/typescript-build'
   ],
-  /*
-   ** Nuxt.js modules
+  /**
+   * Nuxt.js modules
    */
   modules: [
     // Doc: https://bootstrap-vue.js.org
@@ -52,32 +52,51 @@ export default {
     '@nuxtjs/auth',
     '@nuxtjs/toast'
   ],
+  /**
+   * Nuxt.js Auth
+   */
   auth: {
+    localStorage: false,
     strategies: {
       local: {
+        _scheme: 'refresh',
+        token: {
+          property: 'accessToken'
+        },
+        refreshToken: {
+          property: 'refreshToken'
+        },
         endpoints: {
-          login: { url: '/auth/login', method: 'post', propertyName: 'accessToken' },
-          user: { url: '/users/me', method: 'get', propertyName: 'userInfo' },
+          login: { url: '/auth/login', method: 'post' },
+          refresh: { url: '/auth/token/refresh', method: 'post' },
+          user: { url: '/users/me', method: 'get', propertyName: 'user' },
           logout: false
-        }
+        },
+        tokenRequired: true,
+        tokenType: 'Bearer'
       }
     },
     redirect: {
       login: '/account/login',
       logout: '/',
-      // callback: '/callback',
       home: '/'
     }
   },
+  /**
+   * Nuxt.js axios
+   */
   axios: {
     baseURL: process.env.API_URL || 'http://localhost:3000/api'
   },
+  /**
+   * Nuxt.js toast
+   */
   toast: {
     position: 'bottom-right',
     duration: 3000
   },
-  /*
-   ** Build configuration
+  /**
+   * Build configuration
    */
   build: {
   }
