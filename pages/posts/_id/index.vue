@@ -67,7 +67,8 @@ export default class PostDetailPage extends Vue {
       const commentData = await $axios.$get(`/posts/${params.id}/comments`)
 
       if ($auth.$state.loggedIn) {
-        isPostLiked = await $axios.$get(`/posts/${params.id}/like`).isPostLiked
+        const postCommnetData = await $axios.$get(`/posts/${params.id}/like`)
+        isPostLiked = postCommnetData.isPostLiked
       }
 
       return {
