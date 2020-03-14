@@ -23,21 +23,21 @@
     </div>
     <div v-if="$auth.$state.loggedIn && ($auth.$state.user.id === post.user.id)">
       <button class="btn btn-info" @click="editPost(post.id)">
-        Edit Post
+        글 수정
       </button>
       <button class="btn btn-info" @click="deletePost(post.id)">
-        Delete Post
+        글 삭제
       </button>
     </div>
     <div v-if="$auth.$state.loggedIn" class="my-3">
       <button v-if="isPostLiked" class="btn btn-primary" @click="unlikePost(post.id)">
-        UnLike!
+        좋아요 취소!
       </button>
       <button v-else class="btn btn-primary" @click="likePost(post.id)">
-        Like!
+        좋아요!
       </button>
     </div>
-    <post-comment-form :post-id="post.id" />
+    <post-comment-write :post-id="post.id" />
     <post-comment :comments="comments" />
   </main>
 </template>
@@ -46,13 +46,13 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import PostComment from '~/components/post/PostComment.vue'
-import PostCommentForm from '~/components/post/PostCommentForm.vue'
+import PostCommentWrite from '~/components/post/PostCommentWrite.vue'
 Component.registerHooks(['asyncData'])
 
 @Component({
   components: {
     PostComment,
-    PostCommentForm
+    PostCommentWrite
   }
 })
 export default class PostDetailPage extends Vue {
@@ -60,7 +60,7 @@ export default class PostDetailPage extends Vue {
   private comments: any = []
   private isPostLiked: boolean = false;
 
-  async asyncData ({ $auth, $axios, params }) {
+  private async asyncData ({ $auth, $axios, params }) {
     try {
       let isPostLiked: boolean = false
       const data = await $axios.$get(`/posts/${params.id}`)
@@ -85,17 +85,17 @@ export default class PostDetailPage extends Vue {
     }
   }
 
-  getDate (datetime) {
+  private getDate (datetime) {
     return new Date(datetime).toLocaleString('ko-KR', {
       timeZone: 'Asia/Seoul'
     })
   }
 
-  editPost (postId): void {
+  private editPost (postId): void {
     this.$router.push(`/posts/${postId}/edit`)
   }
 
-  async deletePost (postId) {
+  private async deletePost (postId) {
     try {
       const res = await (this as any).$axios.$delete(`/posts/${postId}`)
 
@@ -110,7 +110,7 @@ export default class PostDetailPage extends Vue {
     }
   }
 
-  async likePost (postId) {
+  private async likePost (postId) {
     try {
       const res = await (this as any).$axios.$post(`/posts/${postId}/like`)
       this.post.like = res.like as number
@@ -121,7 +121,7 @@ export default class PostDetailPage extends Vue {
     }
   }
 
-  async unlikePost (postId) {
+  private async unlikePost (postId) {
     try {
       const res = await (this as any).$axios.$delete(`/posts/${postId}/like`)
       this.post.like = res.like as number

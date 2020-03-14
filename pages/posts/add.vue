@@ -2,17 +2,17 @@
   <main class="container my-5">
     <div class="row">
       <div class="col-md-12">
-        <form @submit.prevent="submitPost">
+        <form @submit.prevent="createPost">
           <div class="form-group">
-            <label for>Title</label>
+            <label for>제목</label>
             <input v-model="title" type="text" class="form-control">
           </div>
           <div class="form-group mb-3">
-            <label for>Content</label>
+            <label for>내용</label>
             <textarea v-model="content" class="form-control" rows="20" />
           </div>
-          <button type="submit" class="btn btn-primary">
-            Submit
+          <button type="submit" class="btn btn-primary" :disabled="isSubmitted">
+            글 작성
           </button>
         </form>
       </div>
@@ -28,14 +28,18 @@ import Component from 'vue-class-component'
   middleware: ['auth']
 })
 export default class PostAddPage extends Vue {
+  private isSubmitted: boolean = false
   private title: string = ''
   private content: string = ''
 
-  async submitPost () {
+  private async createPost () {
+    this.isSubmitted = true
+
     const params = {
       title: this.title,
       content: this.content
     }
+
     try {
       const res = await (this as any).$axios.post('/posts', params)
       if (res.status === 200) {
@@ -44,6 +48,7 @@ export default class PostAddPage extends Vue {
       }
     } catch (error) {
       (this as any).$toast.error(error.message as string)
+      this.isSubmitted = false
     }
   }
 }

@@ -6,15 +6,13 @@
           <h3>Latest Posts</h3>
           <div v-if="$auth.$state.loggedIn">
             <nuxt-link to="/posts/add" class="btn btn-info">
-              Add Post
+              새 글 작성
             </nuxt-link>
           </div>
         </div>
       </div>
       <template v-for="post in posts">
-        <div :key="post.id" class="col-lg-3 col-md-4 col-sm-6 mb-4">
-          <post-card :on-view="viewPost" :post="post" />
-        </div>
+        <post-card :key="post.id" :on-view="viewPost" :post="post" />
       </template>
       <infinite-loading spinner="spiral" @infinite="infiniteHandler">
         <div slot="no-more" />
@@ -58,7 +56,7 @@ export default class PostListPage extends Vue {
     }
   }
 
-  infiniteHandler ($state) {
+  private infiniteHandler ($state) {
     setTimeout(async () => {
       try {
         this.page++
@@ -76,7 +74,7 @@ export default class PostListPage extends Vue {
     }, 0)
   }
 
-  viewPost (postId): void {
+  private viewPost (postId): void {
     this.$router.push(`/posts/${postId}`)
   }
 }

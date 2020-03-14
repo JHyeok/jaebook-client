@@ -4,15 +4,15 @@
       <div class="col-md-12">
         <form @submit.prevent="updatePost">
           <div class="form-group">
-            <label for>Title</label>
+            <label for>제목</label>
             <input v-model="post.title" type="text" class="form-control">
           </div>
           <div class="form-group mb-3">
-            <label for>Content</label>
+            <label for>내용</label>
             <textarea v-model="post.content" class="form-control" rows="20" />
           </div>
-          <button type="submit" class="btn btn-primary">
-            Submit
+          <button type="submit" class="btn btn-primary" :disabled="isSubmitted">
+            글 수정
           </button>
         </form>
       </div>
@@ -28,9 +28,10 @@ import Component from 'vue-class-component'
   middleware: ['auth']
 })
 export default class PostEditPage extends Vue {
+  private isSubmitted: boolean = false
   private post: any = []
 
-  async asyncData ({ $axios, params }) {
+  private async asyncData ({ $axios, params }) {
     try {
       const data = await $axios.$get(`/posts/${params.id}`)
       return {
@@ -43,11 +44,14 @@ export default class PostEditPage extends Vue {
     }
   }
 
-  async updatePost () {
+  private async updatePost () {
+    this.isSubmitted = true
+
     const params = {
       title: (this as any).post.title,
       content: (this as any).post.content
     }
+
     try {
       const res = await (this as any).$axios.put(`/posts/${(this as any).post.id}`, params)
       if (res.status === 200) {
@@ -58,6 +62,7 @@ export default class PostEditPage extends Vue {
       }
     } catch (error) {
       (this as any).$toast.error(error.message as string)
+      this.isSubmitted = false
     }
   }
 }
