@@ -15,7 +15,7 @@ export default {
       {
         rel: 'stylesheet',
         type: 'text/css',
-        href: 'https://cdn.rawgit.com/innks/NanumSquareRound/master/nanumsquareround.min.css'
+        href: '//fonts.googleapis.com/css?family=Noto+Sans+KR'
       }
     ]
   },
@@ -28,7 +28,7 @@ export default {
    */
   css: [
     '~/assets/css/transitions.css',
-    '~/assets/fonts/nanumsquareround.css'
+    '~/assets/css/main.css'
   ],
   /**
    * Plugins to load before mounting the App
