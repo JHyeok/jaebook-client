@@ -5,9 +5,6 @@
         <h1 class="text-center">
           회원가입
         </h1>
-        <b-alert v-if="error" show variant="danger">
-          {{ error + '' }}
-        </b-alert>
         <p class="text-center">
           <nuxt-link :to="`/account/login`">
             계정이 있으신가요?
@@ -26,8 +23,11 @@
           <div class="form-group">
             <input id="password" v-model="password" type="password" placeholder="비밀번호" class="form-control form-control-lg">
           </div>
+          <b-alert v-if="error" show variant="danger">
+            {{ error + '' }}
+          </b-alert>
           <div class="text-right mt-4">
-            <button class="btn btn-success btn-lg" :disabled="!isRegister" type="submit">
+            <button class="btn btn-success btn-lg" :disabled="(!isRegister || isSubmitted)" type="submit">
               회원가입
             </button>
           </div>
@@ -43,12 +43,13 @@ import Component from 'vue-class-component'
 
 @Component
 export default class RegisterPage extends Vue {
+  private isSubmitted: boolean = false
+  private error: string = ''
   private name: string = ''
   private email: string = ''
   private password: string = ''
-  private error: string = ''
 
-  isRegister () {
+  private get isRegister () {
     if (this.name.length > 0 && this.email.length > 0 && this.password.length > 0) {
       return true
     } else {
@@ -56,8 +57,10 @@ export default class RegisterPage extends Vue {
     }
   }
 
-  async register () {
+  private async register () {
+    this.isSubmitted = true
     this.error = ''
+
     try {
       const params = {
         realName: this.name,
@@ -91,6 +94,7 @@ export default class RegisterPage extends Vue {
       }
     } catch (error) {
       this.error = (error.message as string) + ''
+      this.isSubmitted = false
     }
   }
 }

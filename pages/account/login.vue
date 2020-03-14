@@ -5,12 +5,6 @@
         <h1 class="text-center">
           로그인
         </h1>
-        <b-alert v-if="error" show variant="danger">
-          {{ error + '' }}
-        </b-alert>
-        <b-alert v-if="$auth.$state.redirect" show>
-          <strong>{{ $auth.$state.redirect }}</strong> 에 접속하기 전에 로그인해야 합니다.
-        </b-alert>
         <p class="text-center">
           <nuxt-link :to="`/account/register`">
             계정이 필요하신가요?
@@ -26,8 +20,14 @@
           <div class="form-group">
             <input id="password" v-model.trim="password" type="password" placeholder="비밀번호" class="form-control form-control-lg">
           </div>
+          <b-alert v-if="error" show variant="danger">
+            {{ error + '' }}
+          </b-alert>
+          <b-alert v-if="$auth.$state.redirect" show>
+            <strong>{{ $auth.$state.redirect }}</strong> 에 접속하기 전에 로그인해야 합니다.
+          </b-alert>
           <div class="text-right mt-4">
-            <button class="btn btn-success btn-lg" :disabled="!isLogin" type="submit">
+            <button class="btn btn-success btn-lg" :disabled="(!isLogin || isSubmitted)" type="submit">
               로그인
             </button>
           </div>
@@ -45,11 +45,12 @@ import Component from 'vue-class-component'
   middleware: ['auth']
 })
 export default class LoginPage extends Vue {
+  private isSubmitted: boolean = false
+  private error:string = ''
   private email:string = ''
   private password:string = ''
-  private error:string = ''
 
-  isLogin (): boolean {
+  private get isLogin (): boolean {
     if (this.email.length > 0 && this.password.length > 0) {
       return true
     } else {
@@ -57,14 +58,16 @@ export default class LoginPage extends Vue {
     }
   }
 
-  redirect (): string {
+  private redirect (): string {
     return (
       this.$route.query.redirect && decodeURIComponent((this as any).$route.query.redirect)
     )
   }
 
-  login (): void {
+  private login (): void {
+    this.isSubmitted = true
     this.error = ''
+
     return (this as any).$auth
       .loginWith('local', {
         data: {
@@ -79,6 +82,7 @@ export default class LoginPage extends Vue {
       })
       .catch((error) => {
         this.error = (error.message as string) + ''
+        this.isSubmitted = false
       })
   }
 }
