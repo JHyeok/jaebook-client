@@ -5,7 +5,7 @@
         <div class="panel panel-info">
           <div class="panel-body">
             <textarea v-model="text" class="form-control" placeholder="댓글을 작성하세요..." rows="3" />
-            <button type="button" class="btn btn-info float-right my-2" @click="createComment(postId)">
+            <button type="button" class="btn btn-info float-right my-2" :disabled="isSubmitted" @click="createComment(postId)">
               댓글 작성
             </button>
             <div class="clearfix" />
@@ -25,13 +25,17 @@ import Component from 'vue-class-component'
     postId: String
   }
 })
-export default class PostCommentForm extends Vue {
+export default class PostCommentWrite extends Vue {
+  private isSubmitted: boolean = false
   private text: string = ''
 
-  async createComment (postId) {
+  private async createComment (postId) {
+    this.isSubmitted = true
+
     const params = {
       text: this.text
     }
+
     try {
       const res = await (this as any).$axios.$post(`/posts/${postId}/comments`, params)
       if (res !== null) {
@@ -40,6 +44,7 @@ export default class PostCommentForm extends Vue {
       }
     } catch (error) {
       (this as any).$toast.error(error.message as string)
+      this.isSubmitted = false
     }
   }
 }

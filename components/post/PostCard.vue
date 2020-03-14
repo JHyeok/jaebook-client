@@ -1,19 +1,21 @@
 <template>
-  <div class="card" @click="onView(post.id)">
-    <div class="card-body post-card-body">
-      <h6 class="card-title">
-        <strong>{{ post.title }}</strong>
-      </h6>
-      <div class="card-text post-content-body">
-        <p class="card-text post-content">
-          {{ post.previewContent }}
-        </p>
-      </div>
-      <div class="post-info">
-        {{ getDate(post.createdAt) }}
-      </div>
-      <div class="card-text">
-        {{ post.user.realName }} ({{ post.user.email }})
+  <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+    <div class="card" @click="onView(post.id)">
+      <div class="card-body post-card-body">
+        <h6 class="card-title">
+          <strong>{{ post.title }}</strong>
+        </h6>
+        <div class="card-text post-content-body">
+          <p class="card-text post-content">
+            {{ post.previewContent }}
+          </p>
+        </div>
+        <div class="post-info">
+          {{ getDate(post.createdAt) }}
+        </div>
+        <div class="card-text">
+          {{ post.user.realName }} ({{ post.user.email }})
+        </div>
       </div>
     </div>
   </div>
@@ -30,7 +32,7 @@ import Component from 'vue-class-component'
   }
 })
 export default class PostCard extends Vue {
-  getDate (datetime) {
+  private getDate (datetime) {
     return new Date(datetime).toLocaleString('ko-KR', {
       timeZone: 'Asia/Seoul'
     })
