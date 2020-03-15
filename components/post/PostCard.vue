@@ -11,6 +11,7 @@
           </p>
         </div>
         <div class="post-info">
+          {{ post.view }} 읽음 · {{ post.like }} 좋아요 <br>
           {{ getDate(post.createdAt) }}
         </div>
         <div class="card-text">
@@ -46,6 +47,10 @@ export default class PostCard extends Vue {
 }
 .post-card-body {
   height: 288px;
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, 0.04) 0px 4px 16px 0px;
+  transition: box-shadow 0.25s ease-in 0s, transform 0.25s ease-in 0s;
+  overflow: hidden;
 }
 .post-content-body {
   cursor: pointer;
