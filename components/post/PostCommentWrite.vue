@@ -30,6 +30,12 @@ export default class PostCommentWrite extends Vue {
   private text: string = ''
 
   private async createComment (postId) {
+    if ((this as any).$auth.$state.loggedIn === false) {
+      (this as any).$toast.info('로그인이 필요합니다.')
+      this.$router.push('/account/login')
+      return
+    }
+
     this.isSubmitted = true
 
     const params = {
