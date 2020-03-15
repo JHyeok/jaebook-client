@@ -1159,7 +1159,7 @@
 
 "@nuxtjs/auth@github:nuxt-community/auth-module#feat/refresh":
   version "4.8.5"
-  resolved "https://codeload.github.com/nuxt-community/auth-module/tar.gz/b09de9a72300110d61205b7b41a36c08e3f77db8"
+  resolved "https://codeload.github.com/nuxt-community/auth-module/tar.gz/c2cb05e3f95f2e98ea6a2b61b5cdae890d2d8922"
   dependencies:
     "@nuxtjs/axios" "^5.9.5"
     body-parser "^1.19.0"

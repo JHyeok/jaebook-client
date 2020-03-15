@@ -61,19 +61,22 @@ export default {
       local: {
         _scheme: 'refresh',
         token: {
-          property: 'accessToken'
+          property: 'accessToken',
+          tokenRequired: true,
+          tokenType: 'Bearer'
         },
         refreshToken: {
           property: 'refreshToken'
         },
+        user: {
+          property: 'user'
+        },
         endpoints: {
           login: { url: '/auth/login', method: 'post' },
           refresh: { url: '/auth/token/refresh', method: 'post' },
-          user: { url: '/users/me', method: 'get', propertyName: 'user' },
+          user: { url: '/users/me', method: 'get' },
           logout: false
-        },
-        tokenRequired: true,
-        tokenType: 'Bearer'
+        }
       }
     },
     redirect: {
