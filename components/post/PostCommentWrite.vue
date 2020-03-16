@@ -44,7 +44,7 @@ export default class PostCommentWrite extends Vue {
 
     try {
       const res = await (this as any).$axios.$post(`/posts/${postId}/comments`, params)
-      if (res !== null) {
+      if (res.status === 201) {
         (this as any).$toast.success('댓글을 작성하였습니다.')
         this.$router.push('/posts')
       }

@@ -14,7 +14,7 @@
           {{ post.view }} 읽음 · {{ post.like }} 좋아요 <br>
           {{ getDate(post.createdAt) }}
         </div>
-        <div class="card-text">
+        <div class="card-text writer-info">
           {{ post.user.realName }} ({{ post.user.email }})
         </div>
       </div>
@@ -44,7 +44,16 @@ export default class PostCard extends Vue {
 <style scoped>
 .card-title {
   cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  word-wrap: break-word;
+  line-height: 1.2em;
+  height: 2.4em;
 }
+
 .post-card-body {
   height: 288px;
   border-radius: 4px;
@@ -52,10 +61,12 @@ export default class PostCard extends Vue {
   transition: box-shadow 0.25s ease-in 0s, transform 0.25s ease-in 0s;
   overflow: hidden;
 }
+
 .post-content-body {
   cursor: pointer;
   height: 150px;
 }
+
 .post-content {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -66,9 +77,14 @@ export default class PostCard extends Vue {
   line-height: 1.2em;
   height: 4.8em;
 }
+
 .post-info {
   font-size: 0.75rem;
   line-height: 1.5;
   color: rgb(134, 142, 150);
+}
+
+.writer-info {
+  font-size: 0.9rem;
 }
 </style>

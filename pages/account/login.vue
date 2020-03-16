@@ -75,13 +75,8 @@ export default class LoginPage extends Vue {
           password: this.password
         }
       })
-      .then((res) => {
-        if (res.data.error) {
-          throw new Error(res.data.message)
-        }
-      })
       .catch((error) => {
-        this.error = (error.message as string) + ''
+        this.error = (error.response.data.message as string)
         this.isSubmitted = false
       })
   }

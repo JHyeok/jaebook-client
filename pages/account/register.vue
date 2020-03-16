@@ -83,17 +83,12 @@ export default class RegisterPage extends Vue {
               password: this.password
             }
           })
-          .then((res) => {
-            if (res.data.error) {
-              throw new Error(res.data.message)
-            }
-          })
           .catch((error) => {
-            this.error = (error.message as string) + ''
+            this.error = (error.response.data.message as string)
           })
       }
     } catch (error) {
-      this.error = (error.message as string) + ''
+      this.error = (error.message as string)
       this.isSubmitted = false
     }
   }
