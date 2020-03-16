@@ -34,6 +34,7 @@ export default class PostCommentItem extends Vue {
 
 <style scoped>
 .comment-body {
-  white-space:pre;
+  word-break: break-all;
+  white-space: pre-wrap;
 }
 </style>

@@ -147,7 +147,8 @@ export default class PostDetailPage extends Vue {
 }
 
 .post-body {
-  white-space:pre;
+  word-break: break-all;
+  white-space: pre-wrap;
 }
 
 .sub-info {
