@@ -58,7 +58,7 @@ export default class PostEditPage extends Vue {
         (this as any).$toast.success('Post를 수정하였습니다.')
         setTimeout(() => {
           this.$router.push(`/posts/${(this as any).post.id}`)
-        }, 100)
+        }, 0)
       }
     } catch (error) {
       (this as any).$toast.error(error.message as string)

@@ -74,7 +74,7 @@ export default class PostListPage extends Vue {
     }, 0)
   }
 
-  private viewPost (postId): void {
+  private viewPost (postId: string) {
     this.$router.push(`/posts/${postId}`)
   }
 }

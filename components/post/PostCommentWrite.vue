@@ -29,7 +29,7 @@ export default class PostCommentWrite extends Vue {
   private isSubmitted: boolean = false
   private text: string = ''
 
-  private async createComment (postId) {
+  private async createComment (postId: string) {
     if ((this as any).$auth.$state.loggedIn === false) {
       (this as any).$toast.info('로그인이 필요합니다.')
       this.$router.push('/account/login')
@@ -46,7 +46,9 @@ export default class PostCommentWrite extends Vue {
       const res = await (this as any).$axios.post(`/posts/${postId}/comments`, params)
       if (res.status === 201) {
         (this as any).$toast.success('댓글을 작성하였습니다.')
-        this.$router.push('/posts')
+        this.isSubmitted = false
+        this.text = ''
+        this.$emit('afterCreateComment', postId)
       }
     } catch (error) {
       (this as any).$toast.error(error.message as string)

@@ -10,7 +10,7 @@
             <hr>
             <ul class="media-list">
               <template v-for="comment in comments">
-                <post-comment-item :key="comment.id" :comment="comment" />
+                <post-comment-item :key="comment.id" :comment="comment" @afterDeleteComment="afterDeleteComment" />
               </template>
             </ul>
           </div>
@@ -34,6 +34,14 @@ import PostCommentItem from './PostCommentItem.vue'
   }
 })
 export default class PostComment extends Vue {
+  private afterDeleteComment (commentId: string) {
+    for (let i = 0; i < (this as any).comments.length; i++) {
+      if ((this as any).comments[i].id === commentId) {
+        (this as any).comments.splice(i, 1)
+        break
+      }
+    }
+  }
 }
 </script>
 

@@ -37,7 +37,7 @@
         좋아요!
       </button>
     </div>
-    <post-comment-write :post-id="post.id" />
+    <post-comment-write :post-id="post.id" @afterCreateComment="afterCreateComment" />
     <post-comment :comments="comments" />
   </main>
 </template>
@@ -85,32 +85,32 @@ export default class PostDetailPage extends Vue {
     }
   }
 
-  private getDate (datetime) {
+  private getDate (datetime: Date) {
     return new Date(datetime).toLocaleString('ko-KR', {
       timeZone: 'Asia/Seoul'
     })
   }
 
-  private editPost (postId): void {
+  private editPost (postId: string) {
     this.$router.push(`/posts/${postId}/edit`)
   }
 
-  private async deletePost (postId) {
-    try {
-      const res = await (this as any).$axios.$delete(`/posts/${postId}`)
+  private async deletePost (postId: string) {
+    if (confirm('삭제 하시겠습니까?')) {
+      try {
+        const res = await (this as any).$axios.delete(`/posts/${postId}`)
 
-      if (res.postId === postId && res.isDelete) {
-        (this as any).$toast.success('포스트를 삭제하였습니다.')
-        this.$router.push('/posts')
-      } else {
-        (this as any).$toast.error('잘못된 접근입니다.')
+        if (res.status === 200) {
+          (this as any).$toast.success('포스트를 삭제하였습니다.')
+          this.$router.push('/posts')
+        }
+      } catch (error) {
+        (this as any).$toast.error(error.message as string)
       }
-    } catch (error) {
-      (this as any).$toast.error(error.message as string)
     }
   }
 
-  private async likePost (postId) {
+  private async likePost (postId: string) {
     try {
       const res = await (this as any).$axios.$post(`/posts/${postId}/like`)
       this.post.like = res.like as number
@@ -121,12 +121,21 @@ export default class PostDetailPage extends Vue {
     }
   }
 
-  private async unlikePost (postId) {
+  private async unlikePost (postId: string) {
     try {
       const res = await (this as any).$axios.$delete(`/posts/${postId}/like`)
       this.post.like = res.like as number
       this.isPostLiked = false;
       (this as any).$toast.success('좋아요를 취소하였습니다.')
+    } catch (error) {
+      (this as any).$toast.error(error.message as string)
+    }
+  }
+
+  private async afterCreateComment (postId: string) {
+    try {
+      const commentData = await (this as any).$axios.$get(`/posts/${postId}/comments`)
+      this.comments = commentData
     } catch (error) {
       (this as any).$toast.error(error.message as string)
     }
