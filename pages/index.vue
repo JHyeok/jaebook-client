@@ -6,6 +6,9 @@
         <nuxt-link :to="`/posts`" class="button--green">
           게시글 보러 가기
         </nuxt-link>
+        <nuxt-link :to="`/chat`" class="button--green">
+          익명 채팅방 참가
+        </nuxt-link>
       </div>
     </div>
   </div>
