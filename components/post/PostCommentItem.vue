@@ -5,11 +5,18 @@
       <span class="text-muted pull-right">
         <small class="text-muted">{{ getDate(comment.createdAt) }}</small>
       </span>
-      <div class="comment-body" v-text="comment.text" />
+      <div v-if="!modified" class="comment-body" v-text="comment.text" />
+      <div v-if="modified">
+        <textarea id="modifiedComment" class="form-control" :value="comment.text" rows="3" />
+        <button type="button" class="btn btn-info float-right my-2" @click="editComment(comment.postId, comment.id)">
+          댓글 수정
+        </button>
+      </div>
     </div>
     <div v-if="$auth.$state.loggedIn && ($auth.$state.user.id === comment.user.id)" class="float-right">
-      <span><a href="#">수정</a></span>
-      <span><a href="#">삭제</a></span>
+      <span v-if="!modified"><a href="javascript:;" @click="toggleModified">수정</a></span>
+      <span v-if="modified"><a href="javascript:;" @click="toggleModified">취소</a></span>
+      <span><a href="javascript:;" @click="deleteComment(comment.postId, comment.id)">삭제</a></span>
     </div>
   </li>
 </template>
@@ -24,10 +31,48 @@ import Component from 'vue-class-component'
   }
 })
 export default class PostCommentItem extends Vue {
-  private getDate (datetime) {
+  private modified: boolean = false
+
+  private toggleModified () {
+    this.modified = !this.modified
+  }
+
+  private getDate (datetime: Date) {
     return new Date(datetime).toLocaleString('ko-KR', {
       timeZone: 'Asia/Seoul'
     })
+  }
+
+  private async editComment (postId: string, commentId: string) {
+    try {
+      const editedComment = (document as any).getElementById('modifiedComment').value
+      const res = await (this as any).$axios.put(`/posts/${postId}/comments/${commentId}`, {
+        text: editedComment
+      })
+
+      if (res.status === 200) {
+        (this as any).comment.text = editedComment
+        this.modified = false
+        ;(this as any).$toast.success('댓글을 수정하였습니다.')
+      }
+    } catch (error) {
+      (this as any).$toast.error(error.message as string)
+    }
+  }
+
+  private async deleteComment (postId: string, commentId: string) {
+    if (confirm('삭제 하시겠습니까?')) {
+      try {
+        const res = await (this as any).$axios.delete(`/posts/${postId}/comments/${commentId}`)
+
+        if (res.status === 200) {
+          (this as any).$toast.success('댓글을 삭제하였습니다.')
+          this.$emit('afterDeleteComment', commentId)
+        }
+      } catch (error) {
+        (this as any).$toast.error(error.message as string)
+      }
+    }
   }
 }
 </script>
