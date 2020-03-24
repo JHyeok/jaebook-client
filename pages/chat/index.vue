@@ -46,11 +46,12 @@ import ChatForm from '~/components/chat/ChatForm.vue'
 })
 export default class ChatPage extends Vue {
   private messages: any[] = []
-  private chatCounter: Number = 0;
+  private chatCounter: Number = 0
 
   mounted () {
     try {
-      (this as any).$socket.$subscribe('chatPeople', (data) => {
+      (this as any).$socket.client.open()
+      ;(this as any).$socket.$subscribe('chatPeople', (data) => {
         this.chatCounter = data
       })
       ;(this as any).$socket.$subscribe('message', (data) => {
@@ -59,6 +60,10 @@ export default class ChatPage extends Vue {
     } catch (error) {
       (this as any).$toast.error(error.message as string)
     }
+  }
+
+  beforeDestroy () {
+    (this as any).$socket.client.disconnect()
   }
 }
 </script>
