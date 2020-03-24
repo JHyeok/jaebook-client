@@ -1,15 +1,57 @@
 <template>
   <div class="container index-container">
-    <div class="row content-wrap">
-      <div class="links">
-        <a href="https://github.com/JHyeok/jaebook-client/blob/master/README.md" target="_blank" class="button--grey">GitHub</a>
-        <nuxt-link :to="`/posts`" class="button--green">
-          게시글 보러 가기
-        </nuxt-link>
-        <nuxt-link :to="`/chat`" class="button--green">
-          익명 채팅방 참가
-        </nuxt-link>
+    <div class="row">
+      <div class="col-12 mb-4">
+        <div class="d-flex justify-content-center">
+          <a href="https://github.com/JHyeok/jaebook-server" target="_blank" class="button--grey">Backend Github</a>
+          <a href="https://github.com/JHyeok/jaebook-chat-server" target="_blank" class="button--grey">Chat Server Github</a>
+          <a href="https://github.com/JHyeok/jaebook-client" target="_blank" class="button--grey">FrontEnd GitHub</a>
+        </div>
       </div>
+      <div class="col-12 text-right mb-4">
+        <div class="d-flex justify-content-between">
+          <h3>주간 인기 글</h3>
+          <nuxt-link to="/posts" class="btn btn-grey">
+            전체 글 보기
+          </nuxt-link>
+        </div>
+      </div>
+      <template v-for="post in posts">
+        <post-card :key="post.id" :on-view="viewPost" :post="post" />
+      </template>
     </div>
   </div>
 </template>
+
+<script lang="ts">
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import PostCard from '~/components/post/PostCard.vue'
+Component.registerHooks(['asyncData'])
+
+@Component({
+  components: {
+    PostCard
+  }
+})
+export default class HomePage extends Vue {
+  private posts: any = []
+
+  async asyncData ({ $axios }) {
+    try {
+      const data = await $axios.$get('/posts?offset=0&limit=8&sort=best')
+      return {
+        posts: data
+      }
+    } catch (error) {
+      return {
+        posts: []
+      }
+    }
+  }
+
+  private viewPost (postId: string) {
+    this.$router.push(`/posts/${postId}`)
+  }
+}
+</script>
