@@ -5,6 +5,20 @@
         <h1 class="text-center">
           로그인
         </h1>
+        <div class="row social-area">
+          <div class="col-xs-12 col-sm-12">
+            <a href="javascript:;" class="btn btn-lg btn-block btn-github" data-toggle="tooltip" data-placement="top" title="GitHub">
+              <i class="fa fa-github fa-2x" />
+              <span class="hidden-xs" />
+            </a>
+          </div>
+        </div>
+        <div class="row login-or">
+          <div class="col-xs-12 col-sm-12">
+            <hr class="hr-or">
+            <span class="span-or">or</span>
+          </div>
+        </div>
         <p class="text-center">
           <nuxt-link :to="`/account/register`">
             계정이 필요하신가요?
@@ -82,3 +96,61 @@ export default class LoginPage extends Vue {
   }
 }
 </script>
+
+<style scoped>
+@import url(//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css);
+.social-area a {
+  color: white;
+  opacity:0.9;
+  margin-top: 10px;
+}
+.social-area a:hover {
+  color: white;
+  opacity:1;
+}
+
+.btn-github {
+  background: #666666; -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+}
+
+.btn-github:hover {
+  background: #333333
+}
+
+.btn-github:focus {
+  background: #fff;
+  color: #666666;
+  border-color: #666666
+}
+
+.login-or {
+  position: relative;
+  font-size: 1.5em;
+  color: #aaa;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+}
+
+.hr-or {
+  background-color: #cdcdcd;
+  height: 1px;
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+}
+
+.span-or {
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: -0.6em;
+  margin-left: -1.5em;
+  background-color: white;
+  width: 3em;
+  text-align: center;
+}
+</style>
