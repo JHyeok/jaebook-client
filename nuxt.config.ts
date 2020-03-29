@@ -1,3 +1,6 @@
+const envPath = `config/.env.${process.env.NODE_ENV || 'development'}`
+require('dotenv').config({ path: envPath })
+
 export default {
   mode: 'universal',
   /**
