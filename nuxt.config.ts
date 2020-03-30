@@ -54,7 +54,8 @@ export default {
     'bootstrap-vue/nuxt',
     '@nuxtjs/axios',
     '@nuxtjs/auth',
-    '@nuxtjs/toast'
+    '@nuxtjs/toast',
+    '@nuxtjs/moment'
   ],
   /**
    * Nuxt.js Auth

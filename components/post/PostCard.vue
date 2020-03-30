@@ -34,9 +34,7 @@ import Component from 'vue-class-component'
 })
 export default class PostCard extends Vue {
   private getDate (datetime) {
-    return new Date(datetime).toLocaleString('ko-KR', {
-      timeZone: 'Asia/Seoul'
-    })
+    return (this as any).$moment(datetime).format('YYYY-MM-DD HH:mm:ss')
   }
 }
 </script>

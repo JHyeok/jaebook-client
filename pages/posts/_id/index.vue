@@ -86,9 +86,7 @@ export default class PostDetailPage extends Vue {
   }
 
   private getDate (datetime: Date) {
-    return new Date(datetime).toLocaleString('ko-KR', {
-      timeZone: 'Asia/Seoul'
-    })
+    return (this as any).$moment(datetime).format('YYYY-MM-DD HH:mm:ss')
   }
 
   private editPost (postId: string) {
