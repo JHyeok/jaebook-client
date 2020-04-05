@@ -19,34 +19,6 @@
     "prestart": "nuxt-ts build",
     "test": "jest"
   },
-  "jest": {
-    "preset": "ts-jest",
-    "moduleNameMapper": {
-      "^@/(.*)$": "<rootDir>/$1",
-      "^~/(.*)$": "<rootDir>/$1",
-      "^vue$": "vue/dist/vue.common.js"
-    },
-    "setupFilesAfterEnv": [
-      "./test/jest.setup.ts"
-    ],
-    "moduleFileExtensions": [
-      "ts",
-      "js",
-      "vue",
-      "json"
-    ],
-    "testRegex": "(test|spec)\\.(jsx?|tsx?)$",
-    "transform": {
-      "^.+\\.ts?$": "ts-jest",
-      "^.+\\.js$": "babel-jest",
-      ".*\\.(vue)$": "vue-jest"
-    },
-    "collectCoverage": true,
-    "collectCoverageFrom": [
-      "<rootDir>/components/**/*.vue",
-      "<rootDir>/pages/**/*.vue"
-    ]
-  },
   "dependencies": {
     "@nuxt/typescript-runtime": "^0.3.6",
     "@nuxtjs/auth": "github:nuxt-community/auth-module#feat/refresh",
@@ -78,5 +50,33 @@
     "ts-jest": "^24.2.0",
     "vue-class-component": "^7.2.3",
     "vue-jest": "^4.0.0-0"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/$1",
+      "^~/(.*)$": "<rootDir>/$1",
+      "^vue$": "vue/dist/vue.common.js"
+    },
+    "setupFilesAfterEnv": [
+      "./test/jest.setup.ts"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "vue",
+      "json"
+    ],
+    "testRegex": "(test|spec)\\.(jsx?|tsx?)$",
+    "transform": {
+      "^.+\\.ts?$": "ts-jest",
+      "^.+\\.js$": "babel-jest",
+      ".*\\.(vue)$": "vue-jest"
+    },
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "<rootDir>/components/**/*.vue",
+      "<rootDir>/pages/**/*.vue"
+    ]
   }
 }
