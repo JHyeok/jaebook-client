@@ -88,7 +88,7 @@ export default class RegisterPage extends Vue {
           })
       }
     } catch (error) {
-      if (error.response.status === 400) {
+      if (error.response?.status === 400) {
         this.error = '올바른 요청이 아닙니다. 예측 가능한 원인: 이메일, 비밀번호'
       } else {
         this.error = (error.message as string)
