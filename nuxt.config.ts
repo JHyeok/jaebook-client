@@ -13,6 +13,9 @@ export default {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
     ],
+    script: [
+      { src: 'https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.2.5/polyfill.min.js' }
+    ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       {
@@ -41,13 +44,13 @@ export default {
     { src: '~/plugins/socket.ts', mode: 'client' }
   ],
   /**
-   * Nuxt.js dev-modules
+   * Nuxt.js Dev-Modules
    */
   buildModules: [
     '@nuxt/typescript-build'
   ],
   /**
-   * Nuxt.js modules
+   * Nuxt.js Modules
    */
   modules: [
     // Doc: https://bootstrap-vue.js.org
@@ -91,20 +94,26 @@ export default {
     }
   },
   /**
-   * Nuxt.js axios
+   * Nuxt.js Axios
    */
   axios: {
     baseURL: process.env.API_URL || 'http://localhost:3000/api'
   },
   /**
-   * Nuxt.js toast
+   * Nuxt.js Environment Variable
+   */
+  env: {
+    chatWebSocket: process.env.CHAT_SERVER_URL || 'http://localhost:4000'
+  },
+  /**
+   * Nuxt.js Toast
    */
   toast: {
     position: 'bottom-right',
     duration: 3000
   },
   /**
-   * Build configuration
+   * Build Configuration
    */
   build: {
   }
