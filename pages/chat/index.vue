@@ -4,17 +4,18 @@
       <div class="col-12">
         <div class="chat-wrapper">
           <p class="text-center">
-            🔥현재 총 {{ chatCounter }} 명이 채팅중🔥
+            ✅ 당신의 익명 닉네임은 {{ name }} 입니다.
           </p>
           <div ref="chat" class="chat">
             <message
               v-for="(message, index) in messages"
               :key="`message-${index}`"
+              :self="message.self"
               :name="message.name"
-              :text="message.message"
+              :message="message.message"
             />
           </div>
-          <div class="chat__form">
+          <div class="chat-form">
             <chat-form />
           </div>
         </div>
@@ -26,6 +27,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component'
+import cookie from 'js-cookie'
 import Message from '~/components/chat/Message.vue'
 import ChatForm from '~/components/chat/ChatForm.vue'
 
@@ -46,24 +48,49 @@ import ChatForm from '~/components/chat/ChatForm.vue'
 })
 export default class ChatPage extends Vue {
   private messages: any[] = []
-  private chatCounter: Number = 0
+  private name: string = ''
 
   mounted () {
-    try {
-      (this as any).$socket.client.open()
-      ;(this as any).$socket.$subscribe('chatPeople', (data) => {
-        this.chatCounter = data
-      })
-      ;(this as any).$socket.$subscribe('message', (data) => {
-        this.messages = [...this.messages, data]
-      })
-    } catch (error) {
-      (this as any).$toast.error(error.message as string)
+    (this as any).$options.sockets.onopen = () => {
+      try {
+        this.name = cookie.get('nickName') || ''
+        ;(this as any).$options.sockets.onmessage = (e) => {
+          const data = JSON.parse(e.data)
+          if (data.action === 'message') {
+            this.messages = [
+              ...this.messages,
+              {
+                self: this.name === data.author,
+                name: data.author,
+                message: data.body
+              }
+            ]
+          } else if (data.action === 'messages') {
+            this.messages = [
+              ...this.messages,
+              ...data.messages
+                .sort((a: any, b: any) => a.createdAt - b.createdAt)
+                .map((message: any) => JSON.parse(message.body))
+                .map(
+                  (data: any) => {
+                    return {
+                      self: this.name === data.author,
+                      name: data.author,
+                      message: data.body
+                    }
+                  }
+                )
+            ]
+          }
+        }
+      } catch (error) {
+        (this as any).$toast.error(error.message as string)
+      }
     }
   }
 
   beforeDestroy () {
-    (this as any).$socket.client.disconnect()
+    (this as any).$disconnect()
   }
 }
 </script>

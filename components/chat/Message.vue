@@ -1,8 +1,13 @@
 <template>
   <div>
-    <div class="msg">
+    <div v-if="self" class="msg">
+      <p class="msg-body self-msg">
+        {{ name }} : {{ message }}
+      </p>
+    </div>
+    <div v-else class="msg">
       <p class="msg-body">
-        {{ name }} : {{ text }}
+        {{ name }} : {{ message }}
       </p>
     </div>
   </div>
@@ -14,8 +19,9 @@ import Component from 'vue-class-component'
 
 @Component({
   props: {
+    self: Boolean,
     name: String,
-    text: String
+    message: String
   }
 })
 export default class Message extends Vue {
@@ -29,5 +35,9 @@ export default class Message extends Vue {
   background: #fbf9fa none repeat scroll 0 0;
   padding: 1px;
   font-weight: 300;
+}
+
+.self-msg {
+  font-weight: 700;
 }
 </style>

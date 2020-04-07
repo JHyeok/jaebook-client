@@ -1,12 +1,15 @@
 import Vue from 'vue'
-// import io from 'socket.io-client'
-import io from 'socket.io-client/dist/socket.io.slim.js'
-import VueSocketIOExt from 'vue-socket.io-extended'
+import VueNativeSock from 'vue-native-websocket'
 
-const chatServerUrl = process.env.CHAT_SERVER_URL || 'http://localhost:4000'
+const chatServerUrl = process.env.chatWebSocket
 
-const socket = io(chatServerUrl, {
-  autoConnect: false
-})
-
-Vue.use(VueSocketIOExt, socket)
+export default ({ store }) => {
+  Vue.use(VueNativeSock, chatServerUrl, {
+    format: 'json',
+    reconnection: true,
+    reconnectionAttempts: 5,
+    reconnectionDelay: 3000,
+    connectManually: true,
+    store
+  })
+}
