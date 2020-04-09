@@ -1,9 +1,12 @@
 <template>
   <main class="container my-5">
-    <div class="row">
+    <div v-if="webSocketStatus" class="row">
       <div class="col-12">
         <div class="chat-wrapper">
-          <p class="text-center">
+          <p v-if="webSocketLoading" class="text-center">
+            ⏳ 접속중입니다... ⏳
+          </p>
+          <p v-else class="text-center">
             ✅ 당신의 익명 닉네임은 {{ name }} 입니다.
           </p>
           <div ref="chat" class="chat">
@@ -18,6 +21,15 @@
           <div class="chat-form">
             <chat-form />
           </div>
+        </div>
+      </div>
+    </div>
+    <div v-else>
+      <div class="col-12">
+        <div class="chat-wrapper">
+          <p class="text-center">
+            🛑 오류가 발생하였습니다. 🛑
+          </p>
         </div>
       </div>
     </div>
@@ -49,10 +61,12 @@ import ChatForm from '~/components/chat/ChatForm.vue'
 export default class ChatPage extends Vue {
   private messages: any[] = []
   private name: string = ''
+  private webSocketLoading: boolean = true
+  private webSocketStatus: boolean = true
 
   mounted () {
-    (this as any).$options.sockets.onopen = () => {
-      try {
+    try {
+      (this as any).$options.sockets.onopen = () => {
         this.name = cookie.get('nickName') || ''
         ;(this as any).$options.sockets.onmessage = (e) => {
           const data = JSON.parse(e.data)
@@ -83,9 +97,11 @@ export default class ChatPage extends Vue {
             ]
           }
         }
-      } catch (error) {
-        (this as any).$toast.error(error.message as string)
       }
+      this.webSocketLoading = false
+    } catch (error) {
+      (this as any).$toast.error(error.message as string)
+      this.webSocketStatus = false
     }
   }
 
