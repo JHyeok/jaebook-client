@@ -45,6 +45,7 @@ export default {
    */
   plugins: [
     { src: '~/plugins/vue-infinite-loading.ts', mode: 'client' },
+    { src: '~/plugins/vee-validate.ts', mode: 'client' },
     { src: '~/plugins/socket.ts', mode: 'client' }
   ],
   /**
@@ -120,5 +121,8 @@ export default {
    * Build Configuration
    */
   build: {
+    transpile: [
+      'vee-validate/dist/rules'
+    ]
   }
 }
