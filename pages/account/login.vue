@@ -24,28 +24,40 @@
             계정이 필요하신가요?
           </nuxt-link>
         </p>
-        <form @submit.prevent="login">
-          <p class="h4 text-center mb-4">
-            JaeBook
-          </p>
-          <div class="form-group">
-            <input id="email" v-model.trim="email" type="email" placeholder="이메일" class="form-control form-control-lg">
-          </div>
-          <div class="form-group">
-            <input id="password" v-model.trim="password" type="password" placeholder="비밀번호" class="form-control form-control-lg">
-          </div>
-          <b-alert v-if="error" show variant="danger">
-            {{ error + '' }}
-          </b-alert>
-          <b-alert v-if="$auth.$state.redirect" show>
-            <strong>{{ $auth.$state.redirect }}</strong> 에 접속하기 전에 로그인해야 합니다.
-          </b-alert>
-          <div class="text-right mt-4">
-            <button class="btn btn-success btn-lg" :disabled="(!isLogin || isSubmitted)" type="submit">
-              로그인
-            </button>
-          </div>
-        </form>
+        <ValidationObserver ref="obs" v-slot="{ handleSubmit, invalid }">
+          <form @submit.prevent="handleSubmit(login)">
+            <p class="h4 text-center mb-4">
+              JaeBook
+            </p>
+            <div class="form-group">
+              <ValidationProvider v-slot="{ errors }" rules="required|email" name="이메일">
+                <input id="email" v-model.trim="email" type="email" placeholder="이메일" class="form-control form-control-lg">
+                <div class="error">
+                  {{ errors[0] }}
+                </div>
+              </ValidationProvider>
+            </div>
+            <div class="form-group">
+              <ValidationProvider v-slot="{ errors }" rules="required|min:3" name="비밀번호">
+                <input id="password" v-model.trim="password" type="password" placeholder="비밀번호" class="form-control form-control-lg">
+                <div class="error">
+                  {{ errors[0] }}
+                </div>
+              </ValidationProvider>
+            </div>
+            <b-alert v-if="error" show variant="danger">
+              {{ error + '' }}
+            </b-alert>
+            <b-alert v-if="$auth.$state.redirect" show>
+              <strong>{{ $auth.$state.redirect }}</strong> 에 접속하기 전에 로그인해야 합니다.
+            </b-alert>
+            <div class="text-right mt-4">
+              <button class="btn btn-success btn-lg" :disabled="(invalid || isSubmitted)" type="submit">
+                로그인
+              </button>
+            </div>
+          </form>
+        </ValidationObserver>
       </div>
     </div>
   </div>
@@ -63,14 +75,6 @@ export default class LoginPage extends Vue {
   private error:string = ''
   private email:string = ''
   private password:string = ''
-
-  private get isLogin (): boolean {
-    if (this.email.length > 0 && this.password.length > 0) {
-      return true
-    } else {
-      return false
-    }
-  }
 
   private redirect (): string {
     return (

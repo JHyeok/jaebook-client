@@ -10,28 +10,45 @@
             계정이 있으신가요?
           </nuxt-link>
         </p>
-        <form @submit.prevent="register">
-          <p class="h4 text-center mb-4">
-            JaeBook
-          </p>
-          <div class="form-group">
-            <input id="name" v-model="name" type="text" placeholder="이름" class="form-control form-control-lg">
-          </div>
-          <div class="form-group">
-            <input id="email" v-model="email" type="email" placeholder="이메일" class="form-control form-control-lg">
-          </div>
-          <div class="form-group">
-            <input id="password" v-model="password" type="password" placeholder="비밀번호" class="form-control form-control-lg">
-          </div>
-          <b-alert v-if="error" show variant="danger">
-            {{ error + '' }}
-          </b-alert>
-          <div class="text-right mt-4">
-            <button class="btn btn-success btn-lg" :disabled="(!isRegister || isSubmitted)" type="submit">
-              회원가입
-            </button>
-          </div>
-        </form>
+        <ValidationObserver ref="obs" v-slot="{ handleSubmit, invalid }">
+          <form @submit.prevent="handleSubmit(register)">
+            <p class="h4 text-center mb-4">
+              JaeBook
+            </p>
+            <div class="form-group">
+              <ValidationProvider v-slot="{ errors }" rules="required|max:20" name="이름">
+                <input id="name" v-model="name" type="text" placeholder="이름" class="form-control form-control-lg">
+                <div class="error">
+                  {{ errors[0] }}
+                </div>
+              </ValidationProvider>
+            </div>
+            <div class="form-group">
+              <ValidationProvider v-slot="{ errors }" rules="required|email" name="이메일">
+                <input id="email" v-model="email" type="email" placeholder="이메일" class="form-control form-control-lg">
+                <div class="error">
+                  {{ errors[0] }}
+                </div>
+              </ValidationProvider>
+            </div>
+            <div class="form-group">
+              <ValidationProvider v-slot="{ errors }" rules="required|min:3" name="비밀번호">
+                <input id="password" v-model="password" type="password" placeholder="비밀번호" class="form-control form-control-lg">
+                <div class="error">
+                  {{ errors[0] }}
+                </div>
+              </ValidationProvider>
+            </div>
+            <b-alert v-if="error" show variant="danger">
+              {{ error + '' }}
+            </b-alert>
+            <div class="text-right mt-4">
+              <button class="btn btn-success btn-lg" :disabled="(invalid || isSubmitted)" type="submit">
+                회원가입
+              </button>
+            </div>
+          </form>
+        </ValidationObserver>
       </div>
     </div>
   </div>
@@ -48,14 +65,6 @@ export default class RegisterPage extends Vue {
   private name: string = ''
   private email: string = ''
   private password: string = ''
-
-  private get isRegister () {
-    if (this.name.length > 0 && this.email.length > 0 && this.password.length > 0) {
-      return true
-    } else {
-      return false
-    }
-  }
 
   private async register () {
     this.isSubmitted = true
