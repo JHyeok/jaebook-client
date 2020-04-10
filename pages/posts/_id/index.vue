@@ -5,6 +5,11 @@
         <h3 class="post-title">
           {{ post.title }}
         </h3>
+        <div class="row">
+          <div class="col-12">
+            <span>{{ post.user.realName }}({{ post.user.email }})</span>
+          </div>
+        </div>
         <span class="date-text">{{ getDate(post.createdAt) }}</span>
       </div>
       <div class="col-md-12 mb-4">
@@ -17,19 +22,23 @@
               </dd>
             </dl>
           </div>
-          <section class="post-body" v-text="post.content" />
         </div>
       </div>
     </div>
-    <div v-if="$auth.$state.loggedIn && ($auth.$state.user.id === post.user.id)">
+    <div class="row mb-4">
+      <div class="col-md-12 mb-4">
+        <section class="post-body" v-text="post.content" />
+      </div>
+    </div>
+    <div v-if="$auth.$state.loggedIn && ($auth.$state.user.id === post.user.id)" class="text-right">
       <button class="btn btn-info" @click="editPost(post.id)">
         글 수정
       </button>
-      <button class="btn btn-info" @click="deletePost(post.id)">
+      <button class="btn btn-danger" @click="deletePost(post.id)">
         글 삭제
       </button>
     </div>
-    <div v-if="$auth.$state.loggedIn" class="my-3">
+    <div v-if="$auth.$state.loggedIn" class="my-3 text-center">
       <button v-if="isPostLiked" class="btn btn-primary" @click="unlikePost(post.id)">
         좋아요 취소!
       </button>
@@ -172,8 +181,6 @@ export default class PostDetailPage extends Vue {
 .date-text {
   position: relative;
   float: left;
-  margin-left: 5px;
-  padding-left: 7px;
   font-size: 14px;
   color: #828282;
   letter-spacing: 0;

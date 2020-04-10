@@ -2,19 +2,51 @@
   <main class="container my-5">
     <div class="row">
       <div class="col-md-12">
-        <form @submit.prevent="updatePost">
-          <div class="form-group">
-            <label for>제목</label>
-            <input v-model="post.title" type="text" class="form-control">
-          </div>
-          <div class="form-group mb-3">
-            <label for>내용</label>
-            <textarea v-model="post.content" class="form-control" rows="20" />
-          </div>
-          <button type="submit" class="btn btn-primary" :disabled="isSubmitted">
-            글 수정
-          </button>
-        </form>
+        <ValidationObserver ref="obs" v-slot="{ handleSubmit, invalid }">
+          <form @submit.prevent="handleSubmit(updatePost)">
+            <validation-provider
+              v-slot="validationContext"
+              :rules="{ required: true }"
+              name="제목"
+            >
+              <b-form-group label="제목" label-for="title">
+                <b-form-input
+                  id="title"
+                  v-model="post.title"
+                  :state="getValidationState(validationContext)"
+                />
+                <b-form-invalid-feedback>
+                  {{ validationContext.errors[0] }}
+                </b-form-invalid-feedback>
+              </b-form-group>
+            </validation-provider>
+            <validation-provider
+              v-slot="validationContext"
+              :rules="{ required: true }"
+              name="내용"
+            >
+              <b-form-group label="내용" label-for="content">
+                <b-form-textarea
+                  id="content"
+                  v-model="post.content"
+                  :state="getValidationState(validationContext)"
+                  rows="20"
+                />
+                <b-form-invalid-feedback>
+                  {{ validationContext.errors[0] }}
+                </b-form-invalid-feedback>
+              </b-form-group>
+            </validation-provider>
+            <div class="text-right mt-1">
+              <b-button class="btn btn-danger" @click="cancelEditPost()">
+                취소
+              </b-button>
+              <b-button type="submit" class="btn btn-success" :disabled="(invalid || isSubmitted)">
+                확인
+              </b-button>
+            </div>
+          </form>
+        </ValidationObserver>
       </div>
     </div>
   </main>
@@ -30,6 +62,16 @@ import Component from 'vue-class-component'
 export default class PostEditPage extends Vue {
   private isSubmitted: boolean = false
   private post: any = []
+
+  private getValidationState ({ dirty, validated, valid = null }) {
+    return dirty || validated ? valid : null
+  }
+
+  private cancelEditPost () {
+    if (confirm('수정을 취소하시겠습니까?')) {
+      this.$router.push(`/posts/${(this as any).post.id}`)
+    }
+  }
 
   private async asyncData ({ $axios, params }) {
     try {

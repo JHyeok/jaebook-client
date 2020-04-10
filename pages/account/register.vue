@@ -15,37 +15,65 @@
             <p class="h4 text-center mb-4">
               JaeBook
             </p>
-            <div class="form-group">
-              <ValidationProvider v-slot="{ errors }" rules="required|max:20" name="이름">
-                <input id="name" v-model="name" type="text" placeholder="이름" class="form-control form-control-lg">
-                <div class="error">
-                  {{ errors[0] }}
-                </div>
-              </ValidationProvider>
-            </div>
-            <div class="form-group">
-              <ValidationProvider v-slot="{ errors }" rules="required|email" name="이메일">
-                <input id="email" v-model="email" type="email" placeholder="이메일" class="form-control form-control-lg">
-                <div class="error">
-                  {{ errors[0] }}
-                </div>
-              </ValidationProvider>
-            </div>
-            <div class="form-group">
-              <ValidationProvider v-slot="{ errors }" rules="required|min:3" name="비밀번호">
-                <input id="password" v-model="password" type="password" placeholder="비밀번호" class="form-control form-control-lg">
-                <div class="error">
-                  {{ errors[0] }}
-                </div>
-              </ValidationProvider>
-            </div>
+            <validation-provider
+              v-slot="validationContext"
+              :rules="{ required: true, max: 20 }"
+              name="이름"
+            >
+              <b-form-group label-for="name">
+                <b-form-input
+                  id="name"
+                  v-model="name"
+                  :state="getValidationState(validationContext)"
+                  placeholder="이름"
+                />
+                <b-form-invalid-feedback>
+                  {{ validationContext.errors[0] }}
+                </b-form-invalid-feedback>
+              </b-form-group>
+            </validation-provider>
+            <validation-provider
+              v-slot="validationContext"
+              :rules="{ required: true, email: true }"
+              name="이메일"
+            >
+              <b-form-group label-for="email">
+                <b-form-input
+                  id="email"
+                  v-model="email"
+                  :state="getValidationState(validationContext)"
+                  placeholder="이메일"
+                />
+                <b-form-invalid-feedback>
+                  {{ validationContext.errors[0] }}
+                </b-form-invalid-feedback>
+              </b-form-group>
+            </validation-provider>
+            <validation-provider
+              v-slot="validationContext"
+              :rules="{ required: true, min: 3 }"
+              name="비밀번호"
+            >
+              <b-form-group label-for="password">
+                <b-form-input
+                  id="password"
+                  v-model="password"
+                  type="password"
+                  :state="getValidationState(validationContext)"
+                  placeholder="비밀번호"
+                />
+                <b-form-invalid-feedback>
+                  {{ validationContext.errors[0] }}
+                </b-form-invalid-feedback>
+              </b-form-group>
+            </validation-provider>
             <b-alert v-if="error" show variant="danger">
               {{ error + '' }}
             </b-alert>
             <div class="text-right mt-4">
-              <button class="btn btn-success btn-lg" :disabled="(invalid || isSubmitted)" type="submit">
+              <b-button type="submit" class="btn btn-success" :disabled="(invalid || isSubmitted)">
                 회원가입
-              </button>
+              </b-button>
             </div>
           </form>
         </ValidationObserver>
@@ -65,6 +93,10 @@ export default class RegisterPage extends Vue {
   private name: string = ''
   private email: string = ''
   private password: string = ''
+
+  private getValidationState ({ dirty, validated, valid = null }) {
+    return dirty || validated ? valid : null
+  }
 
   private async register () {
     this.isSubmitted = true
@@ -97,11 +129,7 @@ export default class RegisterPage extends Vue {
           })
       }
     } catch (error) {
-      if (error.response?.status === 400) {
-        this.error = '올바른 요청이 아닙니다. 예측 가능한 원인: 이메일, 비밀번호'
-      } else {
-        this.error = (error.message as string)
-      }
+      this.error = (error.message as string)
       this.isSubmitted = false
     }
   }

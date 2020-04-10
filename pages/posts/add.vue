@@ -2,19 +2,48 @@
   <main class="container my-5">
     <div class="row">
       <div class="col-md-12">
-        <form @submit.prevent="createPost">
-          <div class="form-group">
-            <label for>제목</label>
-            <input v-model="title" type="text" class="form-control">
-          </div>
-          <div class="form-group mb-3">
-            <label for>내용</label>
-            <textarea v-model="content" class="form-control" rows="20" />
-          </div>
-          <button type="submit" class="btn btn-primary" :disabled="isSubmitted">
-            글 작성
-          </button>
-        </form>
+        <ValidationObserver ref="obs" v-slot="{ handleSubmit, invalid }">
+          <form @submit.prevent="handleSubmit(createPost)">
+            <validation-provider
+              v-slot="validationContext"
+              :rules="{ required: true }"
+              name="제목"
+            >
+              <b-form-group label="제목" label-for="title">
+                <b-form-input
+                  id="title"
+                  v-model="title"
+                  :state="getValidationState(validationContext)"
+                />
+                <b-form-invalid-feedback>
+                  {{ validationContext.errors[0] }}
+                </b-form-invalid-feedback>
+              </b-form-group>
+            </validation-provider>
+            <validation-provider
+              v-slot="validationContext"
+              :rules="{ required: true }"
+              name="내용"
+            >
+              <b-form-group label="내용" label-for="content">
+                <b-form-textarea
+                  id="content"
+                  v-model="content"
+                  :state="getValidationState(validationContext)"
+                  rows="20"
+                />
+                <b-form-invalid-feedback>
+                  {{ validationContext.errors[0] }}
+                </b-form-invalid-feedback>
+              </b-form-group>
+            </validation-provider>
+            <div class="text-right mt-1">
+              <b-button type="submit" class="btn btn-success" :disabled="(invalid || isSubmitted)">
+                글 작성
+              </b-button>
+            </div>
+          </form>
+        </ValidationObserver>
       </div>
     </div>
   </main>
@@ -31,6 +60,10 @@ export default class PostAddPage extends Vue {
   private isSubmitted: boolean = false
   private title: string = ''
   private content: string = ''
+
+  private getValidationState ({ dirty, validated, valid = null }) {
+    return dirty || validated ? valid : null
+  }
 
   private async createPost () {
     this.isSubmitted = true
