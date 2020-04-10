@@ -1,14 +1,12 @@
 <template>
   <div class="container index-container">
     <div class="row">
-      <div class="col-12 mb-4">
-        <div class="d-flex justify-content-center">
-          <a href="https://github.com/JHyeok/jaebook-server" target="_blank" class="button--grey">Backend Github</a>
-          <a href="https://github.com/JHyeok/jaebook-chat-server" target="_blank" class="button--grey">Chat Server Github</a>
-          <a href="https://github.com/JHyeok/jaebook-client" target="_blank" class="button--grey">FrontEnd GitHub</a>
-        </div>
+      <div class="col-12 col-xs-12 text-center mb-4">
+        <a href="https://github.com/JHyeok/jaebook-server" target="_blank" class="button--grey mb-1">Backend Github</a>
+        <a href="https://github.com/JHyeok/jaebook-chat-server" target="_blank" class="button--grey mb-1">Chat Server Github</a>
+        <a href="https://github.com/JHyeok/jaebook-client" target="_blank" class="button--grey mb-1">FrontEnd GitHub</a>
       </div>
-      <div class="col-12 text-right mb-4">
+      <div class="col-12 col-xs-12 text-right mb-4">
         <div class="d-flex justify-content-between">
           <h3>주간 인기 글</h3>
           <nuxt-link to="/posts" class="btn btn-grey">
