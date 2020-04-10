@@ -5,7 +5,7 @@
         <div class="panel panel-info">
           <div class="panel-body">
             <textarea v-model="text" class="form-control" placeholder="댓글을 작성하세요..." rows="3" />
-            <button type="button" class="btn btn-info float-right my-2" :disabled="isSubmitted" @click="createComment(postId)">
+            <button type="button" class="btn btn-info float-right my-2" :disabled="(!isCreateComment || isSubmitted)" @click="createComment(postId)">
               댓글 작성
             </button>
             <div class="clearfix" />
@@ -29,10 +29,23 @@ export default class PostCommentWrite extends Vue {
   private isSubmitted: boolean = false
   private text: string = ''
 
+  private get isCreateComment () {
+    if (this.text.length > 0) {
+      return true
+    } else {
+      return false
+    }
+  }
+
   private async createComment (postId: string) {
     if ((this as any).$auth.$state.loggedIn === false) {
       (this as any).$toast.info('로그인이 필요합니다.')
       this.$router.push('/account/login')
+      return
+    }
+
+    if (this.text.length === 0) {
+      (this as any).$toast.error('댓글 내용을 입력해주세요.')
       return
     }
 

@@ -1,22 +1,28 @@
 <template>
   <li class="media">
-    <div class="media-body">
+    <div class="media-body mb-4">
       <strong class="text-success">{{ comment.user.realName }}({{ comment.user.email }})</strong>
       <span class="text-muted pull-right">
         <small class="text-muted">{{ getDate(comment.createdAt) }}</small>
       </span>
       <div v-if="!modified" class="comment-body" v-text="comment.text" />
       <div v-if="modified">
-        <textarea id="modifiedComment" class="form-control" :value="comment.text" rows="3" />
-        <button type="button" class="btn btn-info float-right my-2" @click="editComment(comment.postId, comment.id)">
-          댓글 수정
-        </button>
+        <textarea id="modifiedComment" class="form-control mt-2" :value="comment.text" rows="3" />
+        <div class="text-right mt-1">
+          <button class="btn btn-info" @click="toggleModified">
+            취소
+          </button>
+          <button class="btn btn-info" @click="editComment(comment.postId, comment.id)">
+            댓글 수정
+          </button>
+        </div>
       </div>
-    </div>
-    <div v-if="$auth.$state.loggedIn && ($auth.$state.user.id === comment.user.id)" class="float-right">
-      <span v-if="!modified"><a href="javascript:;" @click="toggleModified">수정</a></span>
-      <span v-if="modified"><a href="javascript:;" @click="toggleModified">취소</a></span>
-      <span><a href="javascript:;" @click="deleteComment(comment.postId, comment.id)">삭제</a></span>
+      <div v-if="$auth.$state.loggedIn && ($auth.$state.user.id === comment.user.id)" class="float-right">
+        <div v-if="!modified">
+          <span><a href="javascript:;" @click="toggleModified">수정</a></span>
+          <span><a href="javascript:;" @click="deleteComment(comment.postId, comment.id)">삭제</a></span>
+        </div>
+      </div>
     </div>
   </li>
 </template>
@@ -33,17 +39,29 @@ import Component from 'vue-class-component'
 export default class PostCommentItem extends Vue {
   private modified: boolean = false
 
-  private toggleModified () {
-    this.modified = !this.modified
-  }
-
   private getDate (datetime: Date) {
     return (this as any).$moment(datetime).format('YYYY-MM-DD HH:mm:ss')
+  }
+
+  private toggleModified () {
+    if (this.modified) {
+      if (confirm('댓글 수정을 취소하시겠습니까?')) {
+        this.modified = !this.modified
+      }
+    } else {
+      this.modified = !this.modified
+    }
   }
 
   private async editComment (postId: string, commentId: string) {
     try {
       const editedComment = (document as any).getElementById('modifiedComment').value
+
+      if (editedComment.length === 0) {
+        (this as any).$toast.error('댓글 내용을 입력해주세요.')
+        return
+      }
+
       const res = await (this as any).$axios.put(`/posts/${postId}/comments/${commentId}`, {
         text: editedComment
       })
@@ -59,7 +77,7 @@ export default class PostCommentItem extends Vue {
   }
 
   private async deleteComment (postId: string, commentId: string) {
-    if (confirm('삭제 하시겠습니까?')) {
+    if (confirm('삭제하시겠습니까?')) {
       try {
         const res = await (this as any).$axios.delete(`/posts/${postId}/comments/${commentId}`)
 
@@ -79,5 +97,6 @@ export default class PostCommentItem extends Vue {
 .comment-body {
   word-break: break-all;
   white-space: pre-wrap;
+  min-height: 60px;
 }
 </style>
