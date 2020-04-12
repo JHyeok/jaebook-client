@@ -20,7 +20,7 @@
             />
           </div>
           <div class="chat-form">
-            <chat-form />
+            <chat-form :name="name" :ws="ws" />
           </div>
         </div>
       </div>
@@ -41,6 +41,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import cookie from 'js-cookie'
+import Sockette from 'sockette'
 import Message from '~/components/chat/Message.vue'
 import ChatForm from '~/components/chat/ChatForm.vue'
 
@@ -60,56 +61,97 @@ import ChatForm from '~/components/chat/ChatForm.vue'
   }
 })
 export default class ChatPage extends Vue {
+  /* eslint-disable no-console */
+  private ws: any = null
   private messages: any[] = []
   private name: string = ''
+  private text: string = ''
   private webSocketLoading: boolean = true
   private webSocketStatus: boolean = true
 
   mounted () {
-    try {
-      (this as any).$options.sockets.onopen = () => {
-        this.name = cookie.get('nickName') || ''
-        ;(this as any).$options.sockets.onmessage = (e) => {
-          const data = JSON.parse(e.data)
-          if (data.action === 'message') {
-            this.messages = [
-              ...this.messages,
-              {
+    const chatServerUrl = process.env.chatWebSocket || ''
+    this.name = cookie.get('nickName') || ''
+
+    this.ws = new Sockette(chatServerUrl, {
+      timeout: 5e3,
+      maxAttempts: 3,
+      onopen: this.onConnect,
+      onmessage: this.onMessageReceive,
+      onclose: event => console.log(`❌ Socket Close: ${event}`),
+      onerror: (error) => {
+        this.webSocketStatus = false
+        console.log(`🔥 Scoket Error: ${error}`)
+      }
+    })
+
+    this.webSocketLoading = false
+  }
+
+  private onConnect () {
+    const chatDisplayName = cookie.get('nickName')
+
+    if (chatDisplayName) {
+      this.name = chatDisplayName
+    } else {
+      this.name = this.createChatDisplayName(6)
+      cookie.set('nickName', this.name)
+    }
+
+    (this as any).ws.json(
+      {
+        action: 'setName',
+        nickName: this.name
+      }
+    )
+  }
+
+  private createChatDisplayName (length: number): string {
+    let result = ''
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    const charactersLength = characters.length
+
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength))
+    }
+
+    return result
+  }
+
+  private onMessageReceive (e) {
+    const data = JSON.parse(e.data)
+    if (data.action === 'message') {
+      this.messages = [
+        ...this.messages,
+        {
+          self: this.name === data.author,
+          name: data.author,
+          message: data.body,
+          createdAt: data.createdAt
+        }
+      ]
+    } else if (data.action === 'messages') {
+      this.messages = [
+        ...this.messages,
+        ...data.messages
+          .sort((a: any, b: any) => a.createdAt - b.createdAt)
+          .map((message: any) => JSON.parse(message.body))
+          .map(
+            (data: any) => {
+              return {
                 self: this.name === data.author,
                 name: data.author,
                 message: data.body,
                 createdAt: data.createdAt
               }
-            ]
-          } else if (data.action === 'messages') {
-            this.messages = [
-              ...this.messages,
-              ...data.messages
-                .sort((a: any, b: any) => a.createdAt - b.createdAt)
-                .map((message: any) => JSON.parse(message.body))
-                .map(
-                  (data: any) => {
-                    return {
-                      self: this.name === data.author,
-                      name: data.author,
-                      message: data.body,
-                      createdAt: data.createdAt
-                    }
-                  }
-                )
-            ]
-          }
-        }
-      }
-      this.webSocketLoading = false
-    } catch (error) {
-      (this as any).$toast.error(error.message as string)
-      this.webSocketStatus = false
+            }
+          )
+      ]
     }
   }
 
   beforeDestroy () {
-    (this as any).$disconnect()
+    this.ws.close()
   }
 }
 </script>
