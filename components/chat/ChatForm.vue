@@ -31,7 +31,7 @@ export default class ChatForm extends Vue {
 
       (this as any).$socket.sendObj(
         {
-          action: 'rename',
+          action: 'setName',
           nickName: this.name
         }
       )
@@ -44,7 +44,8 @@ export default class ChatForm extends Vue {
         {
           action: 'message',
           body: this.text,
-          author: this.name
+          author: this.name,
+          createdAt: (this as any).$moment().format('HH:mm')
         }
       )
       this.text = ''

@@ -16,6 +16,7 @@
               :self="message.self"
               :name="message.name"
               :message="message.message"
+              :created-at="message.createdAt"
             />
           </div>
           <div class="chat-form">
@@ -76,7 +77,8 @@ export default class ChatPage extends Vue {
               {
                 self: this.name === data.author,
                 name: data.author,
-                message: data.body
+                message: data.body,
+                createdAt: data.createdAt
               }
             ]
           } else if (data.action === 'messages') {
@@ -90,7 +92,8 @@ export default class ChatPage extends Vue {
                     return {
                       self: this.name === data.author,
                       name: data.author,
-                      message: data.body
+                      message: data.body,
+                      createdAt: data.createdAt
                     }
                   }
                 )
