@@ -1,8 +1,11 @@
 <template>
-  <div class="msg-bottom">
-    <form class="message-form" @submit.prevent="sendMessage(name)">
+  <div>
+    <form @submit.prevent="sendMessage(name)">
       <div class="input-group">
-        <input v-model="text" type="text" class="form-control message-input" placeholder="메세지 보내기..." required>
+        <input v-model="text" type="text" class="form-control" placeholder="메세지 보내기..." required>
+        <button type="submit" class="btn btn-outline-dark message-submit">
+          전송
+        </button>
       </div>
     </form>
   </div>
@@ -36,3 +39,10 @@ export default class ChatForm extends Vue {
   }
 }
 </script>
+
+<style scoped>
+.message-submit {
+  margin-left: 0.3rem;
+  border-color: #c1c0c1;
+}
+</style>

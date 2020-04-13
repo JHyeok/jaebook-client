@@ -19,9 +19,7 @@
               :created-at="message.createdAt"
             />
           </div>
-          <div class="chat-form">
-            <chat-form :name="name" :ws="ws" />
-          </div>
+          <chat-form :name="name" :ws="ws" />
         </div>
       </div>
     </div>
