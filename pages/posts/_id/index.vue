@@ -1,5 +1,5 @@
 <template>
-  <main class="container my-5">
+  <main id="scrollAnchor" class="container my-5">
     <div class="row">
       <div class="col-12">
         <h3 class="post-title">
@@ -7,7 +7,9 @@
         </h3>
         <div class="row">
           <div class="col-12">
-            <span>{{ post.user.realName }}({{ post.user.email }})</span>
+            <nuxt-link :to="`/account/${post.user.id}`" class="text-dark">
+              {{ post.user.realName }}({{ post.user.email }})
+            </nuxt-link>
           </div>
         </div>
         <span class="date-text">{{ getDate(post.createdAt) }}</span>
@@ -17,7 +19,6 @@
           <div class="sub-info">
             <dl>
               <dd>
-                <span class="num-text float-left">{{ post.like }} 명이 좋아요를 눌렀습니다.</span>
                 <span class="num-text float-right">{{ post.view }} 읽음</span>
               </dd>
             </dl>
@@ -38,13 +39,16 @@
         글 삭제
       </button>
     </div>
-    <div v-if="$auth.$state.loggedIn" class="my-3 text-center">
-      <button v-if="isPostLiked" class="btn btn-primary" @click="unlikePost(post.id)">
-        좋아요 취소!
-      </button>
-      <button v-else class="btn btn-primary" @click="likePost(post.id)">
-        좋아요!
-      </button>
+    <div class="d-flex justify-content-center my-4">
+      <div class="like-wrap">
+        <div>
+          <input id="like-toggle" v-model="isPostLiked" type="checkbox">
+          <label for="like-toggle" class="like-toggle" @click="toggleLikePost(post.id)">❤</label>
+        </div>
+        <div class="like-count">
+          {{ post.like }}
+        </div>
+      </div>
     </div>
     <post-comment-write :post-id="post.id" @afterCreateComment="afterCreateComment" />
     <post-comment :comments="comments" />
@@ -108,7 +112,7 @@ export default class PostDetailPage extends Vue {
         const res = await (this as any).$axios.delete(`/posts/${postId}`)
 
         if (res.status === 200) {
-          (this as any).$toast.success('포스트를 삭제하였습니다.')
+          (this as any).$toast.success('글을 삭제하였습니다.')
           this.$router.push('/posts')
         }
       } catch (error) {
@@ -117,12 +121,24 @@ export default class PostDetailPage extends Vue {
     }
   }
 
+  private toggleLikePost (postId: string) {
+    if ((this as any).$auth.$state.loggedIn === false) {
+      (this as any).$toast.info('로그인이 필요합니다.')
+      this.$router.push('/account/login')
+      return
+    }
+
+    if (this.isPostLiked) {
+      this.unlikePost(postId)
+    } else {
+      this.likePost(postId)
+    }
+  }
+
   private async likePost (postId: string) {
     try {
       const res = await (this as any).$axios.$post(`/posts/${postId}/like`)
       this.post.like = res.like as number
-      this.isPostLiked = true;
-      (this as any).$toast.success('좋아요를 하였습니다.')
     } catch (error) {
       (this as any).$toast.error(error.message as string)
     }
@@ -132,8 +148,6 @@ export default class PostDetailPage extends Vue {
     try {
       const res = await (this as any).$axios.$delete(`/posts/${postId}/like`)
       this.post.like = res.like as number
-      this.isPostLiked = false;
-      (this as any).$toast.success('좋아요를 취소하였습니다.')
     } catch (error) {
       (this as any).$toast.error(error.message as string)
     }
@@ -143,6 +157,10 @@ export default class PostDetailPage extends Vue {
     try {
       const commentData = await (this as any).$axios.$get(`/posts/${postId}/comments`)
       this.comments = commentData
+      setTimeout(() => {
+        const mainElement = document.getElementById('scrollAnchor')
+        mainElement!.scrollIntoView(false)
+      }, 0)
     } catch (error) {
       (this as any).$toast.error(error.message as string)
     }
@@ -163,6 +181,7 @@ export default class PostDetailPage extends Vue {
 }
 
 .post-body {
+  min-height: 4rem;
   word-break: break-all;
   white-space: pre-wrap;
 }
@@ -184,5 +203,45 @@ export default class PostDetailPage extends Vue {
   font-size: 14px;
   color: #828282;
   letter-spacing: 0;
+}
+
+.like-wrap {
+  width: 2.9rem;
+  display: flex;
+  flex-direction: column;
+  -webkit-box-align: center;
+  align-items: center;
+  background: #f5f3f3;
+  border-width: 1px;
+  border-style: solid;
+  border-image: initial;
+  border-radius: 2rem;
+  border-color: #eae8e8;
+  padding: 0.2rem;
+}
+
+#like-toggle {
+  position: absolute;
+  left: -100vw;
+}
+
+#like-toggle:checked + label {
+  color: #e2264d;
+}
+
+.like-toggle {
+  margin: auto;
+  align-self: center;
+  color: #d0c8c8;
+  font-size: 2em;
+  cursor: pointer;
+}
+
+.like-count {
+  color: #828282;
+  line-height: 1;
+  font-size: 0.75rem;
+  margin-bottom: 0.75rem;
+  font-weight: bold;
 }
 </style>
