@@ -12,7 +12,7 @@
       익명채팅
     </nuxt-link>
     <nav v-if="$auth.$state.loggedIn" class="my-2 my-md-0 mr-md-3">
-      <nuxt-link :to="`/account/profile`" class="p-2 text-dark">
+      <nuxt-link :to="`/account/${$auth.$state.user.id}`" class="p-2 text-dark">
         내정보
       </nuxt-link>
       <a href="javascript:;" class="p-2 text-dark" @click="logout()">로그아웃</a>
