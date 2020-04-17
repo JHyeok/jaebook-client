@@ -31,7 +31,7 @@
             </p>
             <validation-provider
               v-slot="validationContext"
-              :rules="{ required: true, email: true }"
+              :rules="{ required: true, email: true, min:6, max: 30 }"
               name="이메일"
             >
               <b-form-group label-for="email">

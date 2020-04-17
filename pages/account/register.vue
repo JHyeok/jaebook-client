@@ -17,7 +17,7 @@
             </p>
             <validation-provider
               v-slot="validationContext"
-              :rules="{ required: true, max: 20 }"
+              :rules="{ required: true, max: 10 }"
               name="이름"
             >
               <b-form-group label-for="name">
