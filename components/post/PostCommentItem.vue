@@ -1,7 +1,11 @@
 <template>
   <li class="media">
     <div class="media-body mb-4">
-      <strong class="text-success">{{ comment.user.realName }}({{ comment.user.email }})</strong>
+      <strong>
+        <nuxt-link :to="`/account/${comment.user.id}`" class="text-success">
+          {{ comment.user.realName }}({{ comment.user.email }})
+        </nuxt-link>
+      </strong>
       <span class="text-muted pull-right">
         <small class="text-muted">{{ getDate(comment.createdAt) }}</small>
       </span>

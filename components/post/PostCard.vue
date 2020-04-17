@@ -1,11 +1,11 @@
 <template>
   <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-    <div class="card" @click="onView(post.id)">
+    <div class="card">
       <div class="card-body post-card-body">
-        <h6 class="card-title">
+        <h6 class="card-title" @click="onView(post.id)">
           <strong>{{ post.title }}</strong>
         </h6>
-        <div class="card-text post-content-body">
+        <div class="card-text post-content-body" @click="onView(post.id)">
           <p class="card-text post-content">
             {{ post.previewContent }}
           </p>
@@ -15,7 +15,9 @@
           {{ getDate(post.createdAt) }}
         </div>
         <div class="card-text writer-info">
-          {{ post.user.realName }} ({{ post.user.email }})
+          <nuxt-link :to="`/account/${post.user.id}`" class="text-dark">
+            {{ post.user.realName }}({{ post.user.email }})
+          </nuxt-link>
         </div>
       </div>
     </div>
@@ -53,7 +55,7 @@ export default class PostCard extends Vue {
 }
 
 .post-card-body {
-  height: 288px;
+  min-height: 288px;
   border-radius: 4px;
   box-shadow: rgba(0, 0, 0, 0.04) 0px 4px 16px 0px;
   transition: box-shadow 0.25s ease-in 0s, transform 0.25s ease-in 0s;
