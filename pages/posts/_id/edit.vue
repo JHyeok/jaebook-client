@@ -97,7 +97,7 @@ export default class PostEditPage extends Vue {
     try {
       const res = await (this as any).$axios.put(`/posts/${(this as any).post.id}`, params)
       if (res.status === 200) {
-        (this as any).$toast.success('Post를 수정하였습니다.')
+        (this as any).$toast.success('글을 수정하였습니다.')
         setTimeout(() => {
           this.$router.push(`/posts/${(this as any).post.id}`)
         }, 0)

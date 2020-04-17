@@ -3,9 +3,9 @@
     <div class="row">
       <div class="col-12 text-right mb-4">
         <div class="d-flex justify-content-between">
-          <h3>Latest Posts</h3>
+          <h3>📄 전체 글</h3>
           <div v-if="$auth.$state.loggedIn">
-            <nuxt-link to="/posts/add" class="btn btn-info">
+            <nuxt-link to="/posts/add" class="btn btn-outline-dark">
               새 글 작성
             </nuxt-link>
           </div>

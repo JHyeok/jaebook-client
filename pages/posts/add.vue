@@ -76,7 +76,7 @@ export default class PostAddPage extends Vue {
     try {
       const res = await (this as any).$axios.post('/posts', params)
       if (res.status === 201) {
-        (this as any).$toast.success('Post를 작성하였습니다.')
+        (this as any).$toast.success('글을 작성하였습니다.')
         this.$router.push('/posts')
       }
     } catch (error) {
