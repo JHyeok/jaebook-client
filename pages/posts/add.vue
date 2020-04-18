@@ -38,7 +38,11 @@
               </b-form-group>
             </validation-provider>
             <div class="text-right mt-1">
-              <b-button type="submit" class="btn btn-success" :disabled="(invalid || isSubmitted)">
+              <b-button
+                type="submit"
+                class="btn btn-success"
+                :disabled="(invalid || isSubmitted)"
+              >
                 글 작성
               </b-button>
             </div>
@@ -54,33 +58,33 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 
 @Component({
-  middleware: ['auth']
+  middleware: ['auth'],
 })
 export default class PostAddPage extends Vue {
   private isSubmitted: boolean = false
   private title: string = ''
   private content: string = ''
 
-  private getValidationState ({ dirty, validated, valid = null }) {
+  private getValidationState({ dirty, validated, valid = null }) {
     return dirty || validated ? valid : null
   }
 
-  private async createPost () {
+  private async createPost() {
     this.isSubmitted = true
 
     const params = {
       title: this.title,
-      content: this.content
+      content: this.content,
     }
 
     try {
       const res = await (this as any).$axios.post('/posts', params)
       if (res.status === 201) {
-        (this as any).$toast.success('글을 작성하였습니다.')
+        ;(this as any).$toast.success('글을 작성하였습니다.')
         this.$router.push('/posts')
       }
     } catch (error) {
-      (this as any).$toast.error(error.message as string)
+      ;(this as any).$toast.error(error.message as string)
       this.isSubmitted = false
     }
   }

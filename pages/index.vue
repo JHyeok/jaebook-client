@@ -2,9 +2,24 @@
   <div class="container index-container">
     <div class="row">
       <div class="col-12 col-xs-12 text-center mb-4">
-        <a href="https://github.com/JHyeok/jaebook-server" target="_blank" class="button--grey mb-1">Backend Github</a>
-        <a href="https://github.com/JHyeok/serverless-jaebook-chat" target="_blank" class="button--grey mb-1">Chat Server Github</a>
-        <a href="https://github.com/JHyeok/jaebook-client" target="_blank" class="button--grey mb-1">FrontEnd GitHub</a>
+        <a
+          href="https://github.com/JHyeok/jaebook-server"
+          target="_blank"
+          class="button--grey mb-1"
+          >Backend Github</a
+        >
+        <a
+          href="https://github.com/JHyeok/serverless-jaebook-chat"
+          target="_blank"
+          class="button--grey mb-1"
+          >Chat Server Github</a
+        >
+        <a
+          href="https://github.com/JHyeok/jaebook-client"
+          target="_blank"
+          class="button--grey mb-1"
+          >FrontEnd GitHub</a
+        >
       </div>
       <div class="col-12 col-xs-12 text-right mb-4">
         <div class="d-flex justify-content-between">
@@ -34,31 +49,31 @@ Component.registerHooks(['asyncData'])
 
 @Component({
   components: {
-    PostCard
-  }
+    PostCard,
+  },
 })
 export default class HomePage extends Vue {
   private posts: any = []
   private newPosts: any = []
 
-  async asyncData ({ $axios }) {
+  async asyncData({ $axios }) {
     try {
       const posts = await $axios.$get('/posts?offset=0&limit=4&sort=best')
       const newPosts = await $axios.$get('/posts?offset=0&limit=4')
 
       return {
         posts,
-        newPosts
+        newPosts,
       }
     } catch (error) {
       return {
         posts: [],
-        newPosts: []
+        newPosts: [],
       }
     }
   }
 
-  private viewPost (postId: string) {
+  private viewPost(postId: string) {
     this.$router.push(`/posts/${postId}`)
   }
 }

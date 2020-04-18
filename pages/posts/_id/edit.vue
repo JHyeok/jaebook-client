@@ -41,7 +41,11 @@
               <b-button class="btn btn-danger" @click="cancelEditPost()">
                 취소
               </b-button>
-              <b-button type="submit" class="btn btn-success" :disabled="(invalid || isSubmitted)">
+              <b-button
+                type="submit"
+                class="btn btn-success"
+                :disabled="(invalid || isSubmitted)"
+              >
                 확인
               </b-button>
             </div>
@@ -57,53 +61,56 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 
 @Component({
-  middleware: ['auth']
+  middleware: ['auth'],
 })
 export default class PostEditPage extends Vue {
   private isSubmitted: boolean = false
   private post: any = []
 
-  private getValidationState ({ dirty, validated, valid = null }) {
+  private getValidationState({ dirty, validated, valid = null }) {
     return dirty || validated ? valid : null
   }
 
-  private cancelEditPost () {
+  private cancelEditPost() {
     if (confirm('수정을 취소하시겠습니까?')) {
       this.$router.push(`/posts/${(this as any).post.id}`)
     }
   }
 
-  private async asyncData ({ $axios, params }) {
+  private async asyncData({ $axios, params }) {
     try {
       const data = await $axios.$get(`/posts/${params.id}`)
       return {
-        post: data
+        post: data,
       }
     } catch (error) {
       return {
-        post: []
+        post: [],
       }
     }
   }
 
-  private async updatePost () {
+  private async updatePost() {
     this.isSubmitted = true
 
     const params = {
       title: (this as any).post.title,
-      content: (this as any).post.content
+      content: (this as any).post.content,
     }
 
     try {
-      const res = await (this as any).$axios.put(`/posts/${(this as any).post.id}`, params)
+      const res = await (this as any).$axios.put(
+        `/posts/${(this as any).post.id}`,
+        params
+      )
       if (res.status === 200) {
-        (this as any).$toast.success('글을 수정하였습니다.')
+        ;(this as any).$toast.success('글을 수정하였습니다.')
         setTimeout(() => {
           this.$router.push(`/posts/${(this as any).post.id}`)
         }, 0)
       }
     } catch (error) {
-      (this as any).$toast.error(error.message as string)
+      ;(this as any).$toast.error(error.message as string)
       this.isSubmitted = false
     }
   }

@@ -1,5 +1,10 @@
 import Vue from 'vue'
-import { ValidationProvider, ValidationObserver, extend, localize } from 'vee-validate'
+import {
+  ValidationProvider,
+  ValidationObserver,
+  extend,
+  localize,
+} from 'vee-validate'
 import * as originalRules from 'vee-validate/dist/rules'
 import ko from 'vee-validate/dist/locale/ko'
 

@@ -1,5 +1,7 @@
 <template>
-  <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+  <div
+    class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm"
+  >
     <h5 class="my-0 mr-md-auto font-weight-normal">
       <nuxt-link :to="`/`" class="p-2 text-dark font-weight-normal">
         JAEBOOK
@@ -15,7 +17,9 @@
       <nuxt-link :to="`/account/${$auth.$state.user.id}`" class="p-2 text-dark">
         내정보
       </nuxt-link>
-      <a href="javascript:;" class="p-2 text-dark" @click="logout()">로그아웃</a>
+      <a href="javascript:;" class="p-2 text-dark" @click="logout()"
+        >로그아웃</a
+      >
     </nav>
     <nav v-else class="my-2 my-md-0 mr-md-3">
       <nuxt-link :to="`/account/login`" class="p-2 text-dark">
@@ -34,9 +38,9 @@ import Component from 'vue-class-component'
 
 @Component
 export default class HeaderNav extends Vue {
-  logout (): void {
-    (this as any).$auth.logout().then(() => {
-      (this as any).$toast.success('로그아웃 되었습니다.')
+  logout(): void {
+    ;(this as any).$auth.logout().then(() => {
+      ;(this as any).$toast.success('로그아웃 되었습니다.')
     })
   }
 }

@@ -15,11 +15,10 @@ import FooterNav from '~/components/home/FooterNav.vue'
 @Component({
   components: {
     HeaderNav,
-    FooterNav
-  }
+    FooterNav,
+  },
 })
-export default class DefaultLayout extends Vue {
-}
+export default class DefaultLayout extends Vue {}
 </script>
 
 <style>

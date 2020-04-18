@@ -7,7 +7,13 @@
         </h1>
         <div class="row social-area">
           <div class="col-xs-12 col-sm-12">
-            <a href="javascript:;" class="btn btn-lg btn-block btn-github" data-toggle="tooltip" data-placement="top" title="GitHub">
+            <a
+              href="javascript:;"
+              class="btn btn-lg btn-block btn-github"
+              data-toggle="tooltip"
+              data-placement="top"
+              title="GitHub"
+            >
               <i class="fa fa-github fa-2x" />
               <span class="hidden-xs" />
             </a>
@@ -15,7 +21,7 @@
         </div>
         <div class="row login-or">
           <div class="col-xs-12 col-sm-12">
-            <hr class="hr-or">
+            <hr class="hr-or" />
             <span class="span-or">or</span>
           </div>
         </div>
@@ -31,7 +37,7 @@
             </p>
             <validation-provider
               v-slot="validationContext"
-              :rules="{ required: true, email: true, min:6, max: 30 }"
+              :rules="{ required: true, email: true, min: 6, max: 30 }"
               name="이메일"
             >
               <b-form-group label-for="email">
@@ -68,10 +74,15 @@
               {{ error + '' }}
             </b-alert>
             <b-alert v-if="$auth.$state.redirect" show>
-              <strong>{{ $auth.$state.redirect }}</strong> 에 접속하기 전에 로그인해야 합니다.
+              <strong>{{ $auth.$state.redirect }}</strong> 에 접속하기 전에
+              로그인해야 합니다.
             </b-alert>
             <div class="text-right mt-4">
-              <b-button type="submit" class="btn btn-success" :disabled="(invalid || isSubmitted)">
+              <b-button
+                type="submit"
+                class="btn btn-success"
+                :disabled="(invalid || isSubmitted)"
+              >
                 로그인
               </b-button>
             </div>
@@ -87,25 +98,26 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 
 @Component({
-  middleware: ['auth']
+  middleware: ['auth'],
 })
 export default class LoginPage extends Vue {
   private isSubmitted: boolean = false
-  private error:string = ''
-  private email:string = ''
-  private password:string = ''
+  private error: string = ''
+  private email: string = ''
+  private password: string = ''
 
-  private getValidationState ({ dirty, validated, valid = null }) {
+  private getValidationState({ dirty, validated, valid = null }) {
     return dirty || validated ? valid : null
   }
 
-  private redirect (): string {
+  private redirect(): string {
     return (
-      this.$route.query.redirect && decodeURIComponent((this as any).$route.query.redirect)
+      this.$route.query.redirect &&
+      decodeURIComponent((this as any).$route.query.redirect)
     )
   }
 
-  private login (): void {
+  private login(): void {
     this.isSubmitted = true
     this.error = ''
 
@@ -113,11 +125,11 @@ export default class LoginPage extends Vue {
       .loginWith('local', {
         data: {
           email: this.email,
-          password: this.password
-        }
+          password: this.password,
+        },
       })
       .catch((error) => {
-        this.error = (error.response.data.message as string)
+        this.error = error.response.data.message as string
         this.isSubmitted = false
       })
   }
@@ -128,29 +140,30 @@ export default class LoginPage extends Vue {
 @import url(//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css);
 .social-area a {
   color: white;
-  opacity:0.9;
+  opacity: 0.9;
   margin-top: 10px;
 }
 .social-area a:hover {
   color: white;
-  opacity:1;
+  opacity: 1;
 }
 
 .btn-github {
-  background: #666666; -webkit-transition: all 0.5s ease-in-out;
+  background: #666666;
+  -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
   -o-transition: all 0.5s ease-in-out;
   transition: all 0.5s ease-in-out;
 }
 
 .btn-github:hover {
-  background: #333333
+  background: #333333;
 }
 
 .btn-github:focus {
   background: #fff;
   color: #666666;
-  border-color: #666666
+  border-color: #666666;
 }
 
 .login-or {

@@ -1,14 +1,13 @@
 <template>
   <div class="message-wrap d-flex justify-content-between">
     <div v-if="self" class="message-body">
-      💬 <span class="message-author">{{ name }}</span><span class="message-self">(나)</span> : {{ message }}
+      💬 <span class="message-author">{{ name }}</span
+      ><span class="message-self">(나)</span> : {{ message }}
     </div>
     <div v-else class="message-body">
       💬 <span class="message-author">{{ name }}</span> : {{ message }}
     </div>
-    <div class="message-sub-info">
-      ⏰ {{ createdAt }}
-    </div>
+    <div class="message-sub-info">⏰ {{ createdAt }}</div>
   </div>
 </template>
 
@@ -21,11 +20,10 @@ import Component from 'vue-class-component'
     self: Boolean,
     name: String,
     message: String,
-    createdAt: String
-  }
+    createdAt: String,
+  },
 })
-export default class Message extends Vue {
-}
+export default class Message extends Vue {}
 </script>
 
 <style scoped>
@@ -34,18 +32,18 @@ export default class Message extends Vue {
 }
 
 .message-wrap:nth-child(2n) {
-  background: #f5f2f3
+  background: #f5f2f3;
 }
 
 .message-body {
-  font-size: 1.0rem;
+  font-size: 1rem;
   word-break: break-all;
   margin-bottom: 0;
   padding: 1px;
 }
 
 .message-author {
-  color: #ab7a7a
+  color: #ab7a7a;
 }
 
 .message-self {
@@ -56,6 +54,6 @@ export default class Message extends Vue {
 .message-sub-info {
   margin-right: 0.4rem;
   font-size: 12px;
-  color: #A6A6A6
+  color: #a6a6a6;
 }
 </style>

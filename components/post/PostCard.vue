@@ -11,7 +11,7 @@
           </p>
         </div>
         <div class="post-info">
-          {{ post.view }} 읽음 · {{ post.like }} 좋아요 <br>
+          {{ post.view }} 읽음 · {{ post.like }} 좋아요 <br />
           {{ getDate(post.createdAt) }}
         </div>
         <div class="card-text writer-info">
@@ -31,11 +31,11 @@ import Component from 'vue-class-component'
 @Component({
   props: {
     post: Object,
-    onView: Function
-  }
+    onView: Function,
+  },
 })
 export default class PostCard extends Vue {
-  private getDate (datetime) {
+  private getDate(datetime) {
     return (this as any).$moment(datetime).format('YYYY-MM-DD HH:mm:ss')
   }
 }

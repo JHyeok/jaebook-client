@@ -46,17 +46,17 @@ import ChatForm from '~/components/chat/ChatForm.vue'
 @Component({
   components: {
     Message,
-    ChatForm
+    ChatForm,
   },
   watch: {
-    messages () {
+    messages() {
       setTimeout(() => {
         if (this.$refs.chat) {
-          (this as any).$refs.chat.scrollTop = (this as any).$refs.chat.scrollHeight
+          ;(this as any).$refs.chat.scrollTop = (this as any).$refs.chat.scrollHeight
         }
       }, 0)
-    }
-  }
+    },
+  },
 })
 export default class ChatPage extends Vue {
   /* eslint-disable no-console */
@@ -67,7 +67,7 @@ export default class ChatPage extends Vue {
   private webSocketLoading: boolean = true
   private webSocketStatus: boolean = true
 
-  mounted () {
+  mounted() {
     const chatServerUrl = process.env.chatWebSocket || ''
     this.name = cookie.get('nickName') || ''
 
@@ -76,17 +76,17 @@ export default class ChatPage extends Vue {
       maxAttempts: 3,
       onopen: this.onConnect,
       onmessage: this.onMessageReceive,
-      onclose: event => console.log(`❌ Socket Close: ${event}`),
+      onclose: (event) => console.log(`❌ Socket Close: ${event}`),
       onerror: (error) => {
         this.webSocketStatus = false
         console.log(`🔥 Scoket Error: ${error}`)
-      }
+      },
     })
 
     this.webSocketLoading = false
   }
 
-  private onConnect () {
+  private onConnect() {
     const chatDisplayName = cookie.get('nickName')
 
     if (chatDisplayName) {
@@ -96,17 +96,16 @@ export default class ChatPage extends Vue {
       cookie.set('nickName', this.name)
     }
 
-    (this as any).ws.json(
-      {
-        action: 'setName',
-        nickName: this.name
-      }
-    )
+    ;(this as any).ws.json({
+      action: 'setName',
+      nickName: this.name,
+    })
   }
 
-  private createChatDisplayName (length: number): string {
+  private createChatDisplayName(length: number): string {
     let result = ''
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    const characters =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
     const charactersLength = characters.length
 
     for (let i = 0; i < length; i++) {
@@ -116,7 +115,7 @@ export default class ChatPage extends Vue {
     return result
   }
 
-  private onMessageReceive (e) {
+  private onMessageReceive(e) {
     const data = JSON.parse(e.data)
     if (data.action === 'message') {
       this.messages = [
@@ -125,8 +124,8 @@ export default class ChatPage extends Vue {
           self: this.name === data.author,
           name: data.author,
           message: data.body,
-          createdAt: data.createdAt
-        }
+          createdAt: data.createdAt,
+        },
       ]
     } else if (data.action === 'messages') {
       this.messages = [
@@ -134,21 +133,19 @@ export default class ChatPage extends Vue {
         ...data.messages
           .sort((a: any, b: any) => a.createdAt - b.createdAt)
           .map((message: any) => JSON.parse(message.body))
-          .map(
-            (data: any) => {
-              return {
-                self: this.name === data.author,
-                name: data.author,
-                message: data.body,
-                createdAt: data.createdAt
-              }
+          .map((data: any) => {
+            return {
+              self: this.name === data.author,
+              name: data.author,
+              message: data.body,
+              createdAt: data.createdAt,
             }
-          )
+          }),
       ]
     }
   }
 
-  beforeDestroy () {
+  beforeDestroy() {
     this.ws.close()
   }
 }

@@ -4,8 +4,18 @@
       <div class="comment-wrapper">
         <div class="panel panel-info">
           <div class="panel-body">
-            <textarea v-model="text" class="form-control" placeholder="댓글을 작성하세요..." rows="3" />
-            <button type="button" class="btn btn-info float-right my-2" :disabled="(!isCreateComment || isSubmitted)" @click="createComment(postId)">
+            <textarea
+              v-model="text"
+              class="form-control"
+              placeholder="댓글을 작성하세요..."
+              rows="3"
+            />
+            <button
+              type="button"
+              class="btn btn-info float-right my-2"
+              :disabled="(!isCreateComment || isSubmitted)"
+              @click="createComment(postId)"
+            >
               댓글 작성
             </button>
             <div class="clearfix" />
@@ -22,14 +32,14 @@ import Component from 'vue-class-component'
 
 @Component({
   props: {
-    postId: String
-  }
+    postId: String,
+  },
 })
 export default class PostCommentWrite extends Vue {
   private isSubmitted: boolean = false
   private text: string = ''
 
-  private get isCreateComment () {
+  private get isCreateComment() {
     if (this.text.length > 0) {
       return true
     } else {
@@ -37,34 +47,37 @@ export default class PostCommentWrite extends Vue {
     }
   }
 
-  private async createComment (postId: string) {
+  private async createComment(postId: string) {
     if ((this as any).$auth.$state.loggedIn === false) {
-      (this as any).$toast.info('로그인이 필요합니다.')
+      ;(this as any).$toast.info('로그인이 필요합니다.')
       this.$router.push('/account/login')
       return
     }
 
     if (this.text.length === 0) {
-      (this as any).$toast.error('댓글 내용을 입력해주세요.')
+      ;(this as any).$toast.error('댓글 내용을 입력해주세요.')
       return
     }
 
     this.isSubmitted = true
 
     const params = {
-      text: this.text
+      text: this.text,
     }
 
     try {
-      const res = await (this as any).$axios.post(`/posts/${postId}/comments`, params)
+      const res = await (this as any).$axios.post(
+        `/posts/${postId}/comments`,
+        params
+      )
       if (res.status === 201) {
-        (this as any).$toast.success('댓글을 작성하였습니다.')
+        ;(this as any).$toast.success('댓글을 작성하였습니다.')
         this.isSubmitted = false
         this.text = ''
         this.$emit('afterCreateComment', postId)
       }
     } catch (error) {
-      (this as any).$toast.error(error.message as string)
+      ;(this as any).$toast.error(error.message as string)
       this.isSubmitted = false
     }
   }
@@ -73,18 +86,18 @@ export default class PostCommentWrite extends Vue {
 
 <style scoped>
 .comment-wrapper .panel-body {
-  max-height:650px;
-  overflow:auto;
+  max-height: 650px;
+  overflow: auto;
 }
 
 .comment-wrapper .media-list .media img {
-  width:64px;
-  height:64px;
-  border:2px solid #e5e7e8;
+  width: 64px;
+  height: 64px;
+  border: 2px solid #e5e7e8;
 }
 
 .comment-wrapper .media-list .media {
-  border-bottom:1px dashed #efefef;
-  margin-bottom:25px;
+  border-bottom: 1px dashed #efefef;
+  margin-bottom: 25px;
 }
 </style>

@@ -34,8 +34,8 @@ Component.registerHooks(['asyncData'])
 
 @Component({
   components: {
-    PostCard
-  }
+    PostCard,
+  },
 })
 export default class PostListPage extends Vue {
   private posts: any = []
@@ -43,25 +43,27 @@ export default class PostListPage extends Vue {
   private offset: number = 0
   private limit: number = 20
 
-  async asyncData ({ $axios }) {
+  async asyncData({ $axios }) {
     try {
       const data = await $axios.$get('/posts?offset=0&limit=20')
       return {
-        posts: data
+        posts: data,
       }
     } catch (error) {
       return {
-        posts: []
+        posts: [],
       }
     }
   }
 
-  private infiniteHandler ($state) {
+  private infiniteHandler($state) {
     setTimeout(async () => {
       try {
         this.page++
         this.offset = (this.page - 1) * this.limit
-        const data = await (this as any).$axios.$get(`/posts?offset=${this.offset}&limit=${this.limit}`)
+        const data = await (this as any).$axios.$get(
+          `/posts?offset=${this.offset}&limit=${this.limit}`
+        )
         if (data.length > 0) {
           this.posts = [...this.posts, ...data]
           $state.loaded()
@@ -74,7 +76,7 @@ export default class PostListPage extends Vue {
     }, 0)
   }
 
-  private viewPost (postId: string) {
+  private viewPost(postId: string) {
     this.$router.push(`/posts/${postId}`)
   }
 }

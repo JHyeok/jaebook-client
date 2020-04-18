@@ -71,7 +71,11 @@
               {{ error + '' }}
             </b-alert>
             <div class="text-right mt-4">
-              <b-button type="submit" class="btn btn-success" :disabled="(invalid || isSubmitted)">
+              <b-button
+                type="submit"
+                class="btn btn-success"
+                :disabled="(invalid || isSubmitted)"
+              >
                 회원가입
               </b-button>
             </div>
@@ -94,11 +98,11 @@ export default class RegisterPage extends Vue {
   private email: string = ''
   private password: string = ''
 
-  private getValidationState ({ dirty, validated, valid = null }) {
+  private getValidationState({ dirty, validated, valid = null }) {
     return dirty || validated ? valid : null
   }
 
-  private async register () {
+  private async register() {
     this.isSubmitted = true
     this.error = ''
 
@@ -106,7 +110,7 @@ export default class RegisterPage extends Vue {
       const params = {
         realName: this.name,
         email: this.email,
-        password: this.password
+        password: this.password,
       }
 
       const res = await (this as any).$axios.post('/auth/register', params)
@@ -121,15 +125,15 @@ export default class RegisterPage extends Vue {
           .loginWith('local', {
             data: {
               email: this.email,
-              password: this.password
-            }
+              password: this.password,
+            },
           })
           .catch((error) => {
-            this.error = (error.response.data.message as string)
+            this.error = error.response.data.message as string
           })
       }
     } catch (error) {
-      this.error = (error.message as string)
+      this.error = error.message as string
       this.isSubmitted = false
     }
   }

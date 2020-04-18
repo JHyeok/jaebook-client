@@ -31,7 +31,10 @@
         <section class="post-body" v-text="post.content" />
       </div>
     </div>
-    <div v-if="$auth.$state.loggedIn && ($auth.$state.user.id === post.user.id)" class="text-right">
+    <div
+      v-if="$auth.$state.loggedIn && $auth.$state.user.id === post.user.id"
+      class="text-right"
+    >
       <button class="btn btn-info" @click="editPost(post.id)">
         글 수정
       </button>
@@ -42,15 +45,23 @@
     <div class="d-flex justify-content-center my-4">
       <div class="like-wrap">
         <div>
-          <input id="like-toggle" v-model="isPostLiked" type="checkbox">
-          <label for="like-toggle" class="like-toggle" @click="toggleLikePost(post.id)">❤</label>
+          <input id="like-toggle" v-model="isPostLiked" type="checkbox" />
+          <label
+            for="like-toggle"
+            class="like-toggle"
+            @click="toggleLikePost(post.id)"
+            >❤</label
+          >
         </div>
         <div class="like-count">
           {{ post.like }}
         </div>
       </div>
     </div>
-    <post-comment-write :post-id="post.id" @afterCreateComment="afterCreateComment" />
+    <post-comment-write
+      :post-id="post.id"
+      @afterCreateComment="afterCreateComment"
+    />
     <post-comment :comments="comments" />
   </main>
 </template>
@@ -65,15 +76,15 @@ Component.registerHooks(['asyncData'])
 @Component({
   components: {
     PostComment,
-    PostCommentWrite
-  }
+    PostCommentWrite,
+  },
 })
 export default class PostDetailPage extends Vue {
   private post: any = []
   private comments: any = []
-  private isPostLiked: boolean = false;
+  private isPostLiked: boolean = false
 
-  private async asyncData ({ $auth, $axios, params }) {
+  private async asyncData({ $auth, $axios, params }) {
     try {
       let isPostLiked: boolean = false
       const data = await $axios.$get(`/posts/${params.id}`)
@@ -87,43 +98,43 @@ export default class PostDetailPage extends Vue {
       return {
         post: data,
         comments: commentData,
-        isPostLiked
+        isPostLiked,
       }
     } catch (error) {
       return {
         post: [],
         comments: [],
-        isPostLiked: false
+        isPostLiked: false,
       }
     }
   }
 
-  private getDate (datetime: Date) {
+  private getDate(datetime: Date) {
     return (this as any).$moment(datetime).format('YYYY-MM-DD HH:mm:ss')
   }
 
-  private editPost (postId: string) {
+  private editPost(postId: string) {
     this.$router.push(`/posts/${postId}/edit`)
   }
 
-  private async deletePost (postId: string) {
+  private async deletePost(postId: string) {
     if (confirm('삭제 하시겠습니까?')) {
       try {
         const res = await (this as any).$axios.delete(`/posts/${postId}`)
 
         if (res.status === 200) {
-          (this as any).$toast.success('글을 삭제하였습니다.')
+          ;(this as any).$toast.success('글을 삭제하였습니다.')
           this.$router.push('/posts')
         }
       } catch (error) {
-        (this as any).$toast.error(error.message as string)
+        ;(this as any).$toast.error(error.message as string)
       }
     }
   }
 
-  private toggleLikePost (postId: string) {
+  private toggleLikePost(postId: string) {
     if ((this as any).$auth.$state.loggedIn === false) {
-      (this as any).$toast.info('로그인이 필요합니다.')
+      ;(this as any).$toast.info('로그인이 필요합니다.')
       this.$router.push('/account/login')
       return
     }
@@ -135,34 +146,36 @@ export default class PostDetailPage extends Vue {
     }
   }
 
-  private async likePost (postId: string) {
+  private async likePost(postId: string) {
     try {
       const res = await (this as any).$axios.$post(`/posts/${postId}/like`)
       this.post.like = res.like as number
     } catch (error) {
-      (this as any).$toast.error(error.message as string)
+      ;(this as any).$toast.error(error.message as string)
     }
   }
 
-  private async unlikePost (postId: string) {
+  private async unlikePost(postId: string) {
     try {
       const res = await (this as any).$axios.$delete(`/posts/${postId}/like`)
       this.post.like = res.like as number
     } catch (error) {
-      (this as any).$toast.error(error.message as string)
+      ;(this as any).$toast.error(error.message as string)
     }
   }
 
-  private async afterCreateComment (postId: string) {
+  private async afterCreateComment(postId: string) {
     try {
-      const commentData = await (this as any).$axios.$get(`/posts/${postId}/comments`)
+      const commentData = await (this as any).$axios.$get(
+        `/posts/${postId}/comments`
+      )
       this.comments = commentData
       setTimeout(() => {
         const mainElement = document.getElementById('scrollAnchor')
         mainElement!.scrollIntoView(false)
       }, 0)
     } catch (error) {
-      (this as any).$toast.error(error.message as string)
+      ;(this as any).$toast.error(error.message as string)
     }
   }
 }

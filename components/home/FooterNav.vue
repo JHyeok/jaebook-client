@@ -10,15 +10,21 @@
           rel="noopener noreferrer"
           target="blank"
           href="https://github.com/JHyeok"
-        >Github</a>에서 <a
+          >Github</a
+        >에서
+        <a
           rel="noopener noreferrer"
           target="blank"
           href="https://github.com/JHyeok/jaebook-server"
-        >백엔드</a>, <a
+          >백엔드</a
+        >,
+        <a
           rel="noopener noreferrer"
           target="blank"
           href="https://github.com/JHyeok/jaebook-client"
-        >프론트엔드</a> 소스를 확인하실 수 있습니다.
+          >프론트엔드</a
+        >
+        소스를 확인하실 수 있습니다.
       </span>
     </div>
   </footer>
@@ -29,8 +35,7 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 
 @Component
-export default class FooterNavComponent extends Vue {
-}
+export default class FooterNavComponent extends Vue {}
 </script>
 
 <style scoped>

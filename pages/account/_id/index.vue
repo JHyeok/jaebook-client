@@ -68,15 +68,15 @@ Component.registerHooks(['asyncData'])
 @Component({
   components: {
     PostCard,
-    PostComment
-  }
+    PostComment,
+  },
 })
 export default class AccountInfoPage extends Vue {
   private account: any = []
   private posts: any = []
   private comments: any = []
 
-  private async asyncData ({ $axios, params, error }) {
+  private async asyncData({ $axios, params, error }) {
     try {
       const account = await $axios.$get(`/users/${params.id}`)
       const posts = await $axios.$get(`/users/${params.id}/posts`)
@@ -85,18 +85,18 @@ export default class AccountInfoPage extends Vue {
       return {
         account,
         posts,
-        comments
+        comments,
       }
     } catch (e) {
       error({ statusCode: 404, message: 'Page not found' })
     }
   }
 
-  private getDate (datetime: Date) {
+  private getDate(datetime: Date) {
     return (this as any).$moment(datetime).format('YYYY-MM-DD HH:mm:ss')
   }
 
-  private viewPost (postId: string) {
+  private viewPost(postId: string) {
     this.$router.push(`/posts/${postId}`)
   }
 }
