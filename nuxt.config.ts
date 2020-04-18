@@ -13,19 +13,26 @@ const config: Configuration = {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
+      {
+        hid: 'description',
+        name: 'description',
+        content: process.env.npm_package_description || '',
+      },
     ],
     script: [
-      { src: 'https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.2.5/polyfill.min.js' }
+      {
+        src:
+          'https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.2.5/polyfill.min.js',
+      },
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       {
         rel: 'stylesheet',
         type: 'text/css',
-        href: '//fonts.googleapis.com/css?family=Noto+Sans+KR'
-      }
-    ]
+        href: '//fonts.googleapis.com/css?family=Noto+Sans+KR',
+      },
+    ],
   },
   /**
    * Customize the progress-bar color
@@ -33,29 +40,23 @@ const config: Configuration = {
   loading: {
     color: '#03ff0b',
     height: '4px',
-    failedColor: '#ff0342'
+    failedColor: '#ff0342',
   },
   /**
    * Global CSS
    */
-  css: [
-    '~/assets/css/transitions.css',
-    '~/assets/css/main.css'
-  ],
+  css: ['~/assets/css/transitions.css', '~/assets/css/main.css'],
   /**
    * Plugins to load before mounting the App
    */
   plugins: [
     { src: '~/plugins/vue-infinite-loading.ts', mode: 'client' },
-    { src: '~/plugins/vee-validate.ts', mode: 'client' }
+    { src: '~/plugins/vee-validate.ts', mode: 'client' },
   ],
   /**
    * Nuxt.js Dev-Modules
    */
-  buildModules: [
-    '@nuxtjs/eslint-module',
-    '@nuxt/typescript-build'
-  ],
+  buildModules: ['@nuxtjs/eslint-module', '@nuxt/typescript-build'],
   /**
    * Nuxt.js Modules
    */
@@ -65,7 +66,7 @@ const config: Configuration = {
     '@nuxtjs/axios',
     '@nuxtjs/auth',
     '@nuxtjs/toast',
-    '@nuxtjs/moment'
+    '@nuxtjs/moment',
   ],
   /**
    * Nuxt.js Auth
@@ -78,55 +79,67 @@ const config: Configuration = {
         token: {
           property: 'accessToken',
           tokenRequired: true,
-          tokenType: 'Bearer'
+          tokenType: 'Bearer',
         },
         refreshToken: {
-          property: 'refreshToken'
+          property: 'refreshToken',
         },
         user: {
-          property: 'user'
+          property: 'user',
         },
         endpoints: {
           login: { url: '/auth/login', method: 'post' },
           refresh: { url: '/auth/token/refresh', method: 'post' },
           user: { url: '/auth/user', method: 'get' },
-          logout: false
-        }
-      }
+          logout: false,
+        },
+      },
     },
     redirect: {
       login: '/account/login',
       logout: '/',
-      home: '/'
-    }
+      home: '/',
+    },
   },
   /**
    * Nuxt.js Axios
    */
   axios: {
-    baseURL: process.env.API_URL || 'http://localhost:3000/api'
+    baseURL: process.env.API_URL || 'http://localhost:3000/api',
   },
   /**
    * Nuxt.js Environment Variable
    */
   env: {
-    chatWebSocket: process.env.CHAT_SERVER_URL || 'http://localhost:4000'
+    chatWebSocket: process.env.CHAT_SERVER_URL || 'http://localhost:4000',
   },
   /**
    * Nuxt.js Toast
    */
   toast: {
     position: 'bottom-right',
-    duration: 3000
+    duration: 3000,
   },
   /**
    * Build Configuration
    */
   build: {
-    transpile: [
-      'vee-validate/dist/rules'
-    ]
-  }
+    transpile: ['vee-validate/dist/rules'],
+    /*
+     ** You can extend webpack config here
+     */
+    extend(config, ctx) {
+      // Run ESLint on save
+      if (ctx.isDev && ctx.isClient) {
+        config.module!.rules.push({
+          enforce: 'pre',
+          test: /\.(js|vue|ts)$/,
+          loader: 'eslint-loader',
+          exclude: /(node_modules)/,
+        })
+      }
+    },
+  },
 }
 
 export default config
