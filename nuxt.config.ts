@@ -1,7 +1,9 @@
+import { Configuration } from '@nuxt/types'
+
 const envPath = `config/.env.${process.env.NODE_ENV || 'development'}`
 require('dotenv').config({ path: envPath })
 
-export default {
+const config: Configuration = {
   mode: 'universal',
   /**
    * Headers of the page
@@ -51,6 +53,7 @@ export default {
    * Nuxt.js Dev-Modules
    */
   buildModules: [
+    '@nuxtjs/eslint-module',
     '@nuxt/typescript-build'
   ],
   /**
@@ -125,3 +128,5 @@ export default {
     ]
   }
 }
+
+export default config
