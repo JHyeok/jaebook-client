@@ -19,6 +19,11 @@
     "prestart": "nuxt-ts build",
     "test": "jest"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint --fix"
+    }
+  },
   "dependencies": {
     "@nuxt/typescript-runtime": "^0.3.6",
     "@nuxtjs/auth": "nuxt-community/auth-module#dev",
@@ -49,6 +54,7 @@
     "eslint-loader": "^4.0.0",
     "eslint-plugin-nuxt": "^0.5.2",
     "eslint-plugin-prettier": "^3.1.3",
+    "husky": "^4.2.5",
     "jest": "^24.1.0",
     "prettier": "^2.0.4",
     "ts-jest": "^24.2.0",
