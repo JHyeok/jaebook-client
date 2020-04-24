@@ -9,6 +9,7 @@
       <span class="text-muted pull-right">
         <small class="text-muted">{{ getDate(comment.createdAt) }}</small>
       </span>
+      <!-- 댓글이 수정 일 때는 텍스트 입력창이 보이고, 수정이 아닐 때는 작성한 댓글이 보인다 -->
       <div v-if="!modified" class="comment-body" v-text="comment.text" />
       <div v-if="modified">
         <textarea
@@ -29,11 +30,12 @@
           </button>
         </div>
       </div>
+      <!-- 댓글 수정, 삭제 버튼은 로그인한 사용자가 댓글 작성자와 일치해야 한다 -->
       <div
         v-if="$auth.$state.loggedIn && $auth.$state.user.id === comment.user.id"
         class="float-right"
       >
-        <div v-if="!modified">
+        <div v-if="!modified && !comment.isDeleted">
           <span><a href="javascript:;" @click="toggleModified">수정</a></span>
           <span
             ><a
@@ -44,6 +46,7 @@
           >
         </div>
       </div>
+      <!-- 답글이 존재할 때, 답글을 볼 수 있는 버튼을 만든다 -->
       <div v-if="comment.isReplies">
         <a
           href="javascript:;"
@@ -52,6 +55,7 @@
           ><span v-else>답글 보기</span></a
         >
         <div v-if="isViewReply" class="comment-replies-wrap">
+          <!-- 답글 컴포넌트를 v-for를 사용해서 전부 출력한다 -->
           <template v-for="comment in commentReplies">
             <post-comment-reply
               :key="comment.id"
@@ -59,7 +63,11 @@
               @afterDeleteCommentReply="afterDeleteCommentReply"
             />
           </template>
-          <a href="javascript:;" @click="toggleWriteReply"
+          <!-- 답글이 모두 출력되고 답글을 달 수 있는 댓글이면 답글 달기 버튼을 만든다 -->
+          <a
+            v-if="!comment.isDeleted"
+            href="javascript:;"
+            @click="toggleWriteReply"
             ><span v-if="isWriteReply">취소</span
             ><span v-else>답글 달기</span></a
           >
@@ -79,8 +87,12 @@
           </div>
         </div>
       </div>
+      <!-- 답글이 없을 때, 답글을 달 수 있는 버튼을 만든다 -->
       <div v-else>
-        <a href="javascript:;" @click="toggleWriteReply"
+        <a
+          v-if="!comment.isDeleted"
+          href="javascript:;"
+          @click="toggleWriteReply"
           ><span v-if="isWriteReply">취소</span><span v-else>답글 달기</span></a
         >
         <div v-if="isWriteReply">
@@ -120,6 +132,7 @@ export default class PostCommentItem extends Vue {
   private isWriteReply: boolean = false
   private isViewReply: boolean = false
   private isFirstViewReply: boolean = true
+
   private getDate(datetime: Date) {
     return (this as any).$moment(datetime).format('YYYY-MM-DD HH:mm:ss')
   }
@@ -149,6 +162,7 @@ export default class PostCommentItem extends Vue {
       this.isFirstViewReply = false
       this.getCommentReplies(postId, commentId)
     }
+
     this.isViewReply = !this.isViewReply
   }
 
@@ -157,6 +171,7 @@ export default class PostCommentItem extends Vue {
       const commentData = await (this as any).$axios.$get(
         `/posts/${postId}/comments/${commentId}/replies`
       )
+
       this.commentReplies = commentData
     } catch (error) {
       ;(this as any).$toast.error(error.message as string)
@@ -167,16 +182,19 @@ export default class PostCommentItem extends Vue {
     try {
       const editedComment = (document as any).getElementById('modifiedComment')
         .value
+
       if (editedComment.length === 0) {
         ;(this as any).$toast.error('댓글 내용을 입력해주세요.')
         return
       }
+
       const res = await (this as any).$axios.put(
         `/posts/${postId}/comments/${commentId}`,
         {
           text: editedComment,
         }
       )
+
       if (res.status === 200) {
         ;(this as any).comment.text = editedComment
         this.modified = false
@@ -189,18 +207,27 @@ export default class PostCommentItem extends Vue {
 
   private async createCommentReply(postId: string, commentId: string) {
     try {
+      if ((this as any).$auth.$state.loggedIn === false) {
+        ;(this as any).$toast.info('로그인이 필요합니다.')
+        this.$router.push('/account/login')
+        return
+      }
+
       const commentReply = (document as any).getElementById('commentReply')
         .value
+
       if (commentReply.length === 0) {
         ;(this as any).$toast.error('답글 내용을 입력해주세요.')
         return
       }
+
       const res = await (this as any).$axios.post(
         `/posts/${postId}/comments/${commentId}/replies`,
         {
           text: commentReply,
         }
       )
+
       if (res.status === 201) {
         this.isWriteReply = false
         this.isViewReply = true
@@ -219,6 +246,7 @@ export default class PostCommentItem extends Vue {
         const res = await (this as any).$axios.delete(
           `/posts/${postId}/comments/${commentId}`
         )
+
         if (res.status === 200) {
           ;(this as any).$toast.success('댓글을 삭제하였습니다.')
           this.$emit('afterDeleteComment', commentId)
@@ -229,13 +257,19 @@ export default class PostCommentItem extends Vue {
     }
   }
 
+  /**
+   * 댓글의 답글이 삭제된 후 실행되는 메서드
+   */
   private afterDeleteCommentReply(commentId: string) {
     for (let i = 0; i < (this as any).commentReplies.length; i++) {
       if ((this as any).commentReplies[i].id === commentId) {
-        ;(this as any).commentReplies.splice(i, 1)
+        ;(this as any).commentReplies[i].isDeleted = true
+        ;(this as any).commentReplies[i].text =
+          '작성자에 의해 삭제된 댓글입니다.'
         break
       }
     }
+    this.$emit('afterDeleteCommentReply')
   }
 }
 </script>

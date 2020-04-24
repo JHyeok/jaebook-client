@@ -62,7 +62,11 @@
       :post-id="post.id"
       @afterCreateComment="afterCreateComment"
     />
-    <post-comment :comments="comments" />
+    <post-comment
+      :comments="comments.comments"
+      :comments-count="comments.count"
+      @setCommentsCount="setCommentsCount"
+    />
   </main>
 </template>
 
@@ -164,6 +168,9 @@ export default class PostDetailPage extends Vue {
     }
   }
 
+  /**
+   * 댓글이 작성된 후 실행되는 메서드
+   */
   private async afterCreateComment(postId: string) {
     try {
       const commentData = await (this as any).$axios.$get(
@@ -177,6 +184,13 @@ export default class PostDetailPage extends Vue {
     } catch (error) {
       ;(this as any).$toast.error(error.message as string)
     }
+  }
+
+  /**
+   * 댓글 갯수 갱신
+   */
+  private setCommentsCount(count: Number) {
+    ;(this as any).comments.count = count
   }
 }
 </script>
