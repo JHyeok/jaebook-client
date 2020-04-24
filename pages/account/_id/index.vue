@@ -41,16 +41,31 @@
           </div>
         </b-tab>
         <b-tab title="작성 글">
-          <p>글 {{ posts.length }} 개</p>
+          <p>작성 글 {{ posts.length }} 개</p>
           <div class="row">
             <template v-for="post in posts">
-              <post-card :key="post.id" :on-view="viewPost" :post="post" />
+              <account-post
+                :key="post.id"
+                :on-view="viewPost"
+                :post="post"
+                :user="account"
+              />
             </template>
           </div>
         </b-tab>
         <b-tab title="작성 댓글">
-          <div>
-            <post-comment :comments="comments" />
+          <p>작성 댓글 {{ comments.length }} 개</p>
+          <div class="comment-wrapper">
+            <ul class="media-list">
+              <template v-for="comment in comments">
+                <account-comment
+                  :key="comment.id"
+                  :comment="comment"
+                  :user="account"
+                  @afterDeleteComment="afterDeleteComment"
+                />
+              </template>
+            </ul>
           </div>
         </b-tab>
       </b-tabs>
@@ -61,14 +76,14 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import PostCard from '~/components/post/PostCard.vue'
-import PostComment from '~/components/post/PostComment.vue'
+import AccountPost from '~/components/account/AccountPost.vue'
+import AccountComment from '~/components/account/AccountComment.vue'
 Component.registerHooks(['asyncData'])
 
 @Component({
   components: {
-    PostCard,
-    PostComment,
+    AccountPost,
+    AccountComment,
   },
 })
 export default class AccountInfoPage extends Vue {
@@ -99,6 +114,17 @@ export default class AccountInfoPage extends Vue {
   private viewPost(postId: string) {
     this.$router.push(`/posts/${postId}`)
   }
+
+  /**
+   * 댓글이 삭제된 후 실행되는 메서드
+   */
+  private async afterDeleteComment() {
+    const comments = await (this as any).$axios.$get(
+      `/users/${this.account.id}/comments`
+    )
+
+    this.comments = comments
+  }
 }
 </script>
 
@@ -107,5 +133,20 @@ export default class AccountInfoPage extends Vue {
   font-size: 1rem;
   line-height: 1.5;
   color: #6f6e6e;
+}
+
+.comment-wrapper .media-list {
+  margin-left: -40px;
+}
+
+.comment-wrapper .media-list .media img {
+  width: 64px;
+  height: 64px;
+  border: 2px solid #e5e7e8;
+}
+
+.comment-wrapper .media-list .media {
+  border-bottom: 1px dashed #efefef;
+  margin-bottom: 25px;
 }
 </style>
