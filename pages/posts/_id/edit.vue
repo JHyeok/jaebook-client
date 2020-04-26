@@ -77,16 +77,14 @@ export default class PostEditPage extends Vue {
     }
   }
 
-  private async asyncData({ $axios, params }) {
+  private async asyncData({ $axios, params, error }) {
     try {
       const data = await $axios.$get(`/posts/${params.id}`)
       return {
         post: data,
       }
-    } catch (error) {
-      return {
-        post: [],
-      }
+    } catch (err) {
+      error({ statusCode: 404, message: 'Page not found' })
     }
   }
 

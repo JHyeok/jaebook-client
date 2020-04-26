@@ -102,7 +102,7 @@ export default class AccountInfoPage extends Vue {
         posts,
         comments,
       }
-    } catch (e) {
+    } catch (err) {
       error({ statusCode: 404, message: 'Page not found' })
     }
   }

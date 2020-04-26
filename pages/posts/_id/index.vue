@@ -88,7 +88,7 @@ export default class PostDetailPage extends Vue {
   private comments: any = []
   private isPostLiked: boolean = false
 
-  private async asyncData({ $auth, $axios, params }) {
+  private async asyncData({ $auth, $axios, params, error }) {
     try {
       let isPostLiked: boolean = false
       const data = await $axios.$get(`/posts/${params.id}`)
@@ -104,12 +104,8 @@ export default class PostDetailPage extends Vue {
         comments: commentData,
         isPostLiked,
       }
-    } catch (error) {
-      return {
-        post: [],
-        comments: [],
-        isPostLiked: false,
-      }
+    } catch (err) {
+      error({ statusCode: 404, message: 'Page not found' })
     }
   }
 
