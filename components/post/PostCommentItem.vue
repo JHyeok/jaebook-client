@@ -24,6 +24,7 @@
           </button>
           <button
             class="btn btn-info"
+            :disabled="isSubmittedToEdit"
             @click="editComment(comment.postId, comment.id)"
           >
             댓글 수정
@@ -79,6 +80,7 @@
               </button>
               <button
                 class="btn btn-info"
+                :disabled="isSubmittedToCreateReply"
                 @click="createCommentReply(comment.postId, comment.id)"
               >
                 답글 작성
@@ -103,6 +105,7 @@
             </button>
             <button
               class="btn btn-info"
+              :disabled="isSubmittedToCreateReply"
               @click="createCommentReply(comment.postId, comment.id)"
             >
               답글 작성
@@ -132,6 +135,8 @@ export default class PostCommentItem extends Vue {
   private isWriteReply: boolean = false
   private isViewReply: boolean = false
   private isFirstViewReply: boolean = true
+  private isSubmittedToEdit: boolean = false
+  private isSubmittedToCreateReply: boolean = false
 
   private getDate(datetime: Date) {
     return (this as any).$moment(datetime).format('YYYY-MM-DD HH:mm:ss')
@@ -180,6 +185,8 @@ export default class PostCommentItem extends Vue {
 
   private async editComment(postId: string, commentId: string) {
     try {
+      this.isSubmittedToEdit = true
+
       const editedComment = (document as any).getElementById('modifiedComment')
         .value
 
@@ -202,11 +209,15 @@ export default class PostCommentItem extends Vue {
       }
     } catch (error) {
       ;(this as any).$toast.error(error.message as string)
+    } finally {
+      this.isSubmittedToEdit = false
     }
   }
 
   private async createCommentReply(postId: string, commentId: string) {
     try {
+      this.isSubmittedToCreateReply = true
+
       if ((this as any).$auth.$state.loggedIn === false) {
         ;(this as any).$toast.info('로그인이 필요합니다.')
         this.$router.push('/account/login')
@@ -237,6 +248,8 @@ export default class PostCommentItem extends Vue {
       }
     } catch (error) {
       ;(this as any).$toast.error(error.message as string)
+    } finally {
+      this.isSubmittedToCreateReply = false
     }
   }
 

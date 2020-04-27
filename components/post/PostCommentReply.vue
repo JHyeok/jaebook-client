@@ -24,6 +24,7 @@
           </button>
           <button
             class="btn btn-info"
+            :disabled="isSubmittedToEdit"
             @click="editComment(comment.postId, comment.id)"
           >
             댓글 수정
@@ -60,6 +61,7 @@ import Component from 'vue-class-component'
 })
 export default class PostCommentReply extends Vue {
   private modified: boolean = false
+  private isSubmittedToEdit: boolean = false
 
   private getDate(datetime: Date) {
     return (this as any).$moment(datetime).format('YYYY-MM-DD HH:mm:ss')
@@ -77,6 +79,8 @@ export default class PostCommentReply extends Vue {
 
   private async editComment(postId: string, commentId: string) {
     try {
+      this.isSubmittedToEdit = true
+
       const editedComment = (document as any).getElementById('modifiedComment')
         .value
 
@@ -99,6 +103,8 @@ export default class PostCommentReply extends Vue {
       }
     } catch (error) {
       ;(this as any).$toast.error(error.message as string)
+    } finally {
+      this.isSubmittedToEdit = false
     }
   }
 

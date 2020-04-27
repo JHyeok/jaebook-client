@@ -48,6 +48,8 @@ export default class PostCommentWrite extends Vue {
   }
 
   private async createComment(postId: string) {
+    this.isSubmitted = true
+
     if ((this as any).$auth.$state.loggedIn === false) {
       ;(this as any).$toast.info('로그인이 필요합니다.')
       this.$router.push('/account/login')
@@ -58,8 +60,6 @@ export default class PostCommentWrite extends Vue {
       ;(this as any).$toast.error('댓글 내용을 입력해주세요.')
       return
     }
-
-    this.isSubmitted = true
 
     const params = {
       text: this.text,
@@ -72,12 +72,12 @@ export default class PostCommentWrite extends Vue {
       )
       if (res.status === 201) {
         ;(this as any).$toast.success('댓글을 작성하였습니다.')
-        this.isSubmitted = false
         this.text = ''
         this.$emit('afterCreateComment', postId)
       }
     } catch (error) {
       ;(this as any).$toast.error(error.message as string)
+    } finally {
       this.isSubmitted = false
     }
   }
