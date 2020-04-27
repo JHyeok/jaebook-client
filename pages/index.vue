@@ -12,7 +12,7 @@
           href="https://github.com/JHyeok/serverless-jaebook-chat"
           target="_blank"
           class="button--grey mb-1"
-          >Chat Server Github</a
+          >Serverless Chat Github</a
         >
         <a
           href="https://github.com/JHyeok/jaebook-client"

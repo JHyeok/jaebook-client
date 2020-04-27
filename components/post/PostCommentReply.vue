@@ -60,6 +60,7 @@ import Component from 'vue-class-component'
 })
 export default class PostCommentReply extends Vue {
   private modified: boolean = false
+
   private getDate(datetime: Date) {
     return (this as any).$moment(datetime).format('YYYY-MM-DD HH:mm:ss')
   }

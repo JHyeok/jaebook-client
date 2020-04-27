@@ -21,6 +21,12 @@
         <a
           rel="noopener noreferrer"
           target="blank"
+          href="https://github.com/JHyeok/serverless-jaebook-chat"
+          >서버리스 채팅</a
+        >,
+        <a
+          rel="noopener noreferrer"
+          target="blank"
           href="https://github.com/JHyeok/jaebook-client"
           >프론트엔드</a
         >
