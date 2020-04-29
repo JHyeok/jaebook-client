@@ -6,7 +6,7 @@
       "use": "@nuxtjs/now-builder",
       "config": {
         "tscOptions": {
-          "sourceMap": false
+          "sourceMap": true
         }
       }
     }
