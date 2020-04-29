@@ -1,0 +1,5 @@
+{
+  "src": "nuxt.config.ts",
+  "use": "@nuxtjs/now-builder",
+  "config": {}
+}
