@@ -3,42 +3,7 @@
     <div class="mt-4">
       <b-tabs content-class="mt-3" justified>
         <b-tab title="정보" active>
-          <div class="row justify-content-center">
-            <div class="col-4">
-              <h5>
-                이름
-              </h5>
-            </div>
-            <div class="col-4">
-              <div class="info-contents">
-                {{ account.realName }}
-              </div>
-            </div>
-          </div>
-          <div class="row justify-content-center">
-            <div class="col-4">
-              <h5>
-                이메일
-              </h5>
-            </div>
-            <div class="col-4">
-              <div class="info-contents">
-                {{ account.email }}
-              </div>
-            </div>
-          </div>
-          <div class="row justify-content-center">
-            <div class="col-4">
-              <h5>
-                가입일
-              </h5>
-            </div>
-            <div class="col-4">
-              <div class="info-contents">
-                {{ getDate(account.createdAt) }}
-              </div>
-            </div>
-          </div>
+          <account-card :user="account" />
         </b-tab>
         <b-tab title="작성 글">
           <p>작성 글 {{ posts.length }} 개</p>
@@ -76,12 +41,14 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component'
+import AccountCard from '~/components/account/AccountCard.vue'
 import AccountPost from '~/components/account/AccountPost.vue'
 import AccountComment from '~/components/account/AccountComment.vue'
 Component.registerHooks(['asyncData'])
 
 @Component({
   components: {
+    AccountCard,
     AccountPost,
     AccountComment,
   },
