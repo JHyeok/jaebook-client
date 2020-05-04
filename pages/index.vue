@@ -56,7 +56,7 @@ export default class HomePage extends Vue {
   private posts: any = []
   private newPosts: any = []
 
-  async asyncData({ $axios }) {
+  private async asyncData({ $axios }) {
     try {
       const posts = await $axios.$get('/posts?offset=0&limit=4&sort=best')
       const newPosts = await $axios.$get('/posts?offset=0&limit=4')

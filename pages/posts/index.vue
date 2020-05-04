@@ -43,7 +43,7 @@ export default class PostListPage extends Vue {
   private offset: number = 0
   private limit: number = 20
 
-  async asyncData({ $axios }) {
+  private async asyncData({ $axios }) {
     try {
       const data = await $axios.$get('/posts?offset=0&limit=20')
       return {
