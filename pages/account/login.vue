@@ -86,7 +86,7 @@ export default class LoginPage extends Vue {
   private email: string = ''
   private password: string = ''
 
-  private getValidationState({ dirty, validated, valid = null }) {
+  private getValidationState({ dirty, validated, valid = null }): any {
     return dirty || validated ? valid : null
   }
 

@@ -39,7 +39,7 @@ export default class PostCommentWrite extends Vue {
   private isSubmitted: boolean = false
   private text: string = ''
 
-  private get isCreateComment() {
+  private get isCreateComment(): boolean {
     if (this.text.length > 0) {
       return true
     } else {
@@ -47,7 +47,7 @@ export default class PostCommentWrite extends Vue {
     }
   }
 
-  private async createComment(postId: string) {
+  private async createComment(postId: string): Promise<void> {
     this.isSubmitted = true
 
     if ((this as any).$auth.$state.loggedIn === false) {

@@ -139,11 +139,11 @@ export default class PostCommentItem extends Vue {
   private isSubmittedToEdit: boolean = false
   private isSubmittedToCreateReply: boolean = false
 
-  private getDate(datetime: Date) {
+  private getDate(datetime: Date): string {
     return (this as any).$moment(datetime).format('YYYY-MM-DD HH:mm:ss')
   }
 
-  private toggleModified() {
+  private toggleModified(): void {
     if (this.modified) {
       if (confirm('댓글 수정을 취소하시겠습니까?')) {
         this.modified = !this.modified
@@ -153,7 +153,7 @@ export default class PostCommentItem extends Vue {
     }
   }
 
-  private toggleWriteReply() {
+  private toggleWriteReply(): void {
     if (this.isWriteReply) {
       if (confirm('답글 작성을 취소하시겠습니까?')) {
         this.isWriteReply = !this.isWriteReply
@@ -163,7 +163,7 @@ export default class PostCommentItem extends Vue {
     }
   }
 
-  private toggleViewReply(postId: string, commentId: string) {
+  private toggleViewReply(postId: string, commentId: string): void {
     if (this.isFirstViewReply) {
       this.isFirstViewReply = false
       this.getCommentReplies(postId, commentId)
@@ -172,7 +172,10 @@ export default class PostCommentItem extends Vue {
     this.isViewReply = !this.isViewReply
   }
 
-  private async getCommentReplies(postId: string, commentId: string) {
+  private async getCommentReplies(
+    postId: string,
+    commentId: string
+  ): Promise<void> {
     try {
       const commentData = await (this as any).$axios.$get(
         `/posts/${postId}/comments/${commentId}/replies`
@@ -184,7 +187,7 @@ export default class PostCommentItem extends Vue {
     }
   }
 
-  private async editComment(postId: string, commentId: string) {
+  private async editComment(postId: string, commentId: string): Promise<void> {
     try {
       this.isSubmittedToEdit = true
 
@@ -215,7 +218,10 @@ export default class PostCommentItem extends Vue {
     }
   }
 
-  private async createCommentReply(postId: string, commentId: string) {
+  private async createCommentReply(
+    postId: string,
+    commentId: string
+  ): Promise<void> {
     try {
       this.isSubmittedToCreateReply = true
 
@@ -254,7 +260,10 @@ export default class PostCommentItem extends Vue {
     }
   }
 
-  private async deleteComment(postId: string, commentId: string) {
+  private async deleteComment(
+    postId: string,
+    commentId: string
+  ): Promise<void> {
     if (confirm('삭제하시겠습니까?')) {
       try {
         const res = await (this as any).$axios.delete(
@@ -274,7 +283,7 @@ export default class PostCommentItem extends Vue {
   /**
    * 댓글의 답글이 삭제된 후 실행되는 메서드
    */
-  private afterDeleteCommentReply(commentId: string) {
+  private afterDeleteCommentReply(commentId: string): void {
     for (let i = 0; i < (this as any).commentReplies.length; i++) {
       if ((this as any).commentReplies[i].id === commentId) {
         ;(this as any).commentReplies[i].isDeleted = true

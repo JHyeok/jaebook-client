@@ -67,11 +67,11 @@ export default class PostEditPage extends Vue {
   private isSubmitted: boolean = false
   private post: any = []
 
-  private getValidationState({ dirty, validated, valid = null }) {
+  private getValidationState({ dirty, validated, valid = null }): any {
     return dirty || validated ? valid : null
   }
 
-  private cancelEditPost() {
+  private cancelEditPost(): void {
     if (confirm('수정을 취소하시겠습니까?')) {
       this.$router.push(`/posts/${(this as any).post.id}`)
     }
@@ -88,7 +88,7 @@ export default class PostEditPage extends Vue {
     }
   }
 
-  private async updatePost() {
+  private async updatePost(): Promise<void> {
     this.isSubmitted = true
 
     const params = {

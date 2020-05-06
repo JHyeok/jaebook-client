@@ -109,15 +109,15 @@ export default class PostDetailPage extends Vue {
     }
   }
 
-  private getDate(datetime: Date) {
+  private getDate(datetime: Date): string {
     return (this as any).$moment(datetime).format('YYYY-MM-DD HH:mm:ss')
   }
 
-  private editPost(postId: string) {
+  private editPost(postId: string): void {
     this.$router.push(`/posts/${postId}/edit`)
   }
 
-  private async deletePost(postId: string) {
+  private async deletePost(postId: string): Promise<void> {
     if (confirm('삭제 하시겠습니까?')) {
       try {
         const res = await (this as any).$axios.delete(`/posts/${postId}`)
@@ -132,7 +132,7 @@ export default class PostDetailPage extends Vue {
     }
   }
 
-  private toggleLikePost(postId: string) {
+  private toggleLikePost(postId: string): void {
     if ((this as any).$auth.$state.loggedIn === false) {
       ;(this as any).$toast.info('로그인이 필요합니다.')
       this.$router.push('/account/login')
@@ -146,7 +146,7 @@ export default class PostDetailPage extends Vue {
     }
   }
 
-  private async likePost(postId: string) {
+  private async likePost(postId: string): Promise<void> {
     try {
       const res = await (this as any).$axios.$post(`/posts/${postId}/like`)
       this.post.like = res.like as number
@@ -155,7 +155,7 @@ export default class PostDetailPage extends Vue {
     }
   }
 
-  private async unlikePost(postId: string) {
+  private async unlikePost(postId: string): Promise<void> {
     try {
       const res = await (this as any).$axios.$delete(`/posts/${postId}/like`)
       this.post.like = res.like as number
@@ -167,7 +167,7 @@ export default class PostDetailPage extends Vue {
   /**
    * 댓글이 작성된 후 실행되는 메서드
    */
-  private async afterCreateComment(postId: string) {
+  private async afterCreateComment(postId: string): Promise<void> {
     try {
       const commentData = await (this as any).$axios.$get(
         `/posts/${postId}/comments`
@@ -185,7 +185,7 @@ export default class PostDetailPage extends Vue {
   /**
    * 댓글 갯수 갱신
    */
-  private setCommentsCount(count: Number) {
+  private setCommentsCount(count: Number): void {
     ;(this as any).comments.count = count
   }
 }

@@ -73,7 +73,7 @@ export default class HomePage extends Vue {
     }
   }
 
-  private viewPost(postId: string) {
+  private viewPost(postId: string): void {
     this.$router.push(`/posts/${postId}`)
   }
 }

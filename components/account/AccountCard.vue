@@ -61,15 +61,15 @@ export default class AccountCard extends Vue {
   private modified: boolean = false
   private isSubmittedToEditName: boolean = false
 
-  private toggleModified() {
+  private toggleModified(): void {
     this.modified = !this.modified
   }
 
-  private getDate(datetime: Date) {
+  private getDate(datetime: Date): string {
     return (this as any).$moment(datetime).format('YYYY-MM-DD HH:mm:ss')
   }
 
-  private async editUserName(userId: string) {
+  private async editUserName(userId: string): Promise<void> {
     try {
       this.isSubmittedToEditName = true
 

@@ -42,7 +42,7 @@ export default class PostComment extends Vue {
   /**
    * 댓글이 삭제된 후 실행되는 메서드
    */
-  private afterDeleteComment(commentId: string) {
+  private afterDeleteComment(commentId: string): void {
     for (let i = 0; i < (this as any).comments.length; i++) {
       if ((this as any).comments[i].id === commentId) {
         ;(this as any).comments[i].isDeleted = true
@@ -58,7 +58,7 @@ export default class PostComment extends Vue {
   /**
    * 댓글의 답글이 작성된 후 실행되는 메서드
    */
-  private setCommentReplies(commentId: string) {
+  private setCommentReplies(commentId: string): void {
     for (let i = 0; i < (this as any).comments.length; i++) {
       if ((this as any).comments[i].id === commentId) {
         ;(this as any).comments[i].isReplies = true
@@ -73,7 +73,7 @@ export default class PostComment extends Vue {
   /**
    * 댓글의 답글이 삭제된 후 실행되는 메서드
    */
-  private afterDeleteCommentReply() {
+  private afterDeleteCommentReply(): void {
     let count = (this as any).commentsCount
     count--
     this.$emit('setCommentsCount', count)

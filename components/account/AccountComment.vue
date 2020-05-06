@@ -46,11 +46,14 @@ import Component from 'vue-class-component'
   },
 })
 export default class AccountComment extends Vue {
-  private getDate(datetime: Date) {
+  private getDate(datetime: Date): string {
     return (this as any).$moment(datetime).format('YYYY-MM-DD HH:mm:ss')
   }
 
-  private async deleteComment(postId: string, commentId: string) {
+  private async deleteComment(
+    postId: string,
+    commentId: string
+  ): Promise<void> {
     if (confirm('삭제하시겠습니까?')) {
       try {
         const res = await (this as any).$axios.delete(

@@ -64,11 +64,11 @@ export default class PostCommentReply extends Vue {
   private modified: boolean = false
   private isSubmittedToEdit: boolean = false
 
-  private getDate(datetime: Date) {
+  private getDate(datetime: Date): string {
     return (this as any).$moment(datetime).format('YYYY-MM-DD HH:mm:ss')
   }
 
-  private toggleModified() {
+  private toggleModified(): void {
     if (this.modified) {
       if (confirm('댓글 수정을 취소하시겠습니까?')) {
         this.modified = !this.modified
@@ -78,7 +78,7 @@ export default class PostCommentReply extends Vue {
     }
   }
 
-  private async editComment(postId: string, commentId: string) {
+  private async editComment(postId: string, commentId: string): Promise<void> {
     try {
       this.isSubmittedToEdit = true
 
@@ -109,7 +109,10 @@ export default class PostCommentReply extends Vue {
     }
   }
 
-  private async deleteComment(postId: string, commentId: string) {
+  private async deleteComment(
+    postId: string,
+    commentId: string
+  ): Promise<void> {
     if (confirm('삭제하시겠습니까?')) {
       try {
         const res = await (this as any).$axios.delete(

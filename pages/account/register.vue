@@ -98,11 +98,11 @@ export default class RegisterPage extends Vue {
   private email: string = ''
   private password: string = ''
 
-  private getValidationState({ dirty, validated, valid = null }) {
+  private getValidationState({ dirty, validated, valid = null }): any {
     return dirty || validated ? valid : null
   }
 
-  private async register() {
+  private async register(): Promise<void> {
     this.isSubmitted = true
     this.error = ''
 

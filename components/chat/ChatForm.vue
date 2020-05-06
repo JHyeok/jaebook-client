@@ -30,7 +30,7 @@ import Component from 'vue-class-component'
 export default class ChatForm extends Vue {
   private text: string = ''
 
-  private sendMessage(name: string) {
+  private sendMessage(name: string): void {
     if (this.text.length) {
       ;(this as any).ws.json({
         action: 'message',

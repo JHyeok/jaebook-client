@@ -65,11 +65,11 @@ export default class PostAddPage extends Vue {
   private title: string = ''
   private content: string = ''
 
-  private getValidationState({ dirty, validated, valid = null }) {
+  private getValidationState({ dirty, validated, valid = null }): any {
     return dirty || validated ? valid : null
   }
 
-  private async createPost() {
+  private async createPost(): Promise<void> {
     this.isSubmitted = true
 
     const params = {

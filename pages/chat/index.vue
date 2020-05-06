@@ -86,7 +86,7 @@ export default class ChatPage extends Vue {
     this.webSocketLoading = false
   }
 
-  private onConnect() {
+  private onConnect(): void {
     const chatDisplayName = cookie.get('nickName')
 
     if (chatDisplayName) {
@@ -115,7 +115,7 @@ export default class ChatPage extends Vue {
     return result
   }
 
-  private onMessageReceive(e) {
+  private onMessageReceive(e): void {
     const data = JSON.parse(e.data)
     if (data.action === 'message') {
       this.messages = [
