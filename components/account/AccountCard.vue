@@ -37,7 +37,10 @@
         </div>
       </div>
     </div>
-    <div class="row justify-content-end">
+    <div
+      v-if="$auth.$state.loggedIn && $auth.$state.user.id === user.id"
+      class="row justify-content-end"
+    >
       <button v-if="!modified" class="btn btn-info" @click="toggleModified">
         수정
       </button>
