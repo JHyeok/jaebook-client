@@ -8,15 +8,13 @@ JaeBook 개인 프로젝트의 Front 입니다.
 
 > 회원가입이 완료되면 바로 로그인이 됩니다.
 
-> JWT 기반이며, accessToken을 사용하며 RefreshToken을 사용해서 갱신을 합니다.
+> JWT 기반이며, AccessToken을 인증에 사용하며 RefreshToken을 사용해서 AccessToken을 재발급받습니다.
 
 ![sign-in-and-sign-up](./readme/sign-in-and-sign-up.gif)
 
 ## 새 글 작성 및 수정과 삭제
 
 > 글을 작성하고 작성자는 수정과 삭제를 할 수 있습니다.
-
-> 작성된 글은 좋아요를 누를 수 있으며, 조회수와 좋아요의 수를 계산해서 주간 인기글을 선정해서 보여줍니다.
 
 ![create-post-and-comment](./readme/create-post-and-comment.gif)
 
@@ -49,6 +47,18 @@ JaeBook 개인 프로젝트의 Front 입니다.
 > 다른 페이지를 갔다 오거나 새로 들어온 사용자도 이전의 채팅 내용을 확인할 수 있습니다.
 
 ![chat](./readme/chat.gif)
+
+## 글 무한 스크롤
+
+> 페이지 번호를 누르는 방식이 아닌 스크롤을 내려서 다음 글을 확인할 수 있습니다.
+
+![post-infinite-scroll](./readme/post-infinite-scroll.gif)
+
+## 글 좋아요
+
+> 작성된 글은 좋아요를 누를 수 있으며, 조회수와 좋아요의 수를 계산해서 주간 인기글을 선정해서 보여줍니다.
+
+![post-like](./readme/post-like.gif)
 
 ## TechStack
 
